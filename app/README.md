@@ -52,7 +52,7 @@ anyone: it encrypts environment-variable values and API keys.
 | Storage | Buckets and files stored on disk with checksums, signed download URLs, access policies, usage accounting. |
 | Environment variables | AES-256-GCM encryption at rest, per-environment scoping, masked by default, explicit reveal, copy. |
 | Infrastructure | Server, container and monitoring views backed by stored state; actions are refused when no runtime is connected instead of pretending. |
-| Solene | Chat with a real local analysis engine over your deployment logs, schema and configuration. Uses a hosted model only if `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` or `OPENROUTER_API_KEY` is set. |
+| Solene | Chat with a real local analysis engine over your deployment logs, schema and configuration. Uses Google Gemini when `GEMINI_API_KEY` is set (default model: `gemini-2.5-flash`), or OpenAI, Anthropic or OpenRouter when their respective keys are configured. |
 | API Explorer | Lists the live REST surface, endpoints and example payloads, pulls a real API key. |
 | Documentation | An in-product reference at `/docs` covering deploys, environments, databases, storage, API keys, roles and operations. |
 | Public site | A marketing landing page with real screenshots of the running console, sign-in and sign-up routes. |
@@ -107,7 +107,7 @@ and S3 live in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 | `REDFOX_SECRET_KEY` | Key material for environment-variable encryption. Set in production. |
 | `REDFOX_BUILD_DIR` | Build workspace root (default: system temp). Kept outside the app tree so npm cannot inherit Redfox's own manifest. |
 | `REDFOX_BUILD_TIMEOUT_MS` | Per-command build timeout (default 180000). |
-| `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` / `OPENROUTER_API_KEY` | Enables hosted Solene answers. |
+| `GEMINI_API_KEY` | Enables Google Gemini for hosted Solene answers. |\n| `GEMINI_MODEL` | Optional Gemini model override (default: `gemini-2.5-flash`). |\n| `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` / `OPENROUTER_API_KEY` | Alternative hosted model providers. |
 | `REDFOX_MODEL` | Model name override for the selected provider. |
 | `DOCKER_HOST` | Enables real container controls when a Docker API endpoint is reachable. |
 
