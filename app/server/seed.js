@@ -27,7 +27,7 @@ export const DEMO_PASSWORD = 'redfox-demo';
 
 /* ---------------------------------------------------------------- fixtures */
 const USERS = [
-  { email: 'demo@redfox.dev', name: 'Alex Moreau', color: '#E4593B', role: 'owner' },
+  { email: 'demo@redfox.dev', name: 'Alex Moreau', color: '#FF7000', role: 'owner' },
   { email: 'maya@redfox.dev', name: 'Maya Lindqvist', color: '#58A6FF', role: 'admin' },
   { email: 'tom@redfox.dev', name: 'Tom Okafor', color: '#3FB950', role: 'developer' },
   { email: 'sara@redfox.dev', name: 'Sara Bauer', color: '#D29922', role: 'viewer' },
@@ -325,7 +325,7 @@ const SHARED_FILES = {
   'package.json': JSON.stringify({ name: '@redfox/shared-config', version: '1.2.0', main: 'index.js' }, null, 2),
   'index.js': `export const brand = {
   name: 'Redfox',
-  accent: '#E4593B',
+  accent: '#FF7000',
   surfaces: { base: '#0A0A0B', raised: '#101012', border: '#242428' },
 };
 `,
@@ -667,7 +667,7 @@ export function seedAll({ force = false } = {}) {
 
   /* storage */
   const bucketSpecs = [
-    { project: 'atlas-web', name: 'public-assets', visibility: 'public', files: { 'logo.svg': '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="24"><text x="0" y="18" font-family="monospace" font-size="18" fill="#E4593B">atlas</text></svg>', 'robots.txt': 'User-agent: *\nAllow: /\n' } },
+    { project: 'atlas-web', name: 'public-assets', visibility: 'public', files: { 'logo.svg': '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="24"><text x="0" y="18" font-family="monospace" font-size="18" fill="#FF7000">atlas</text></svg>', 'robots.txt': 'User-agent: *\nAllow: /\n' } },
     { project: 'atlas-web', name: 'uploads', visibility: 'private', files: { 'press-kit/one-pager.txt': 'Atlas press kit. Contact press@atlas.example.\n' } },
     { project: 'pulso-api', name: 'avatars', visibility: 'public', files: { 'northwind.svg': '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><circle cx="32" cy="32" r="30" fill="#242428"/></svg>' } },
     { project: 'pulso-api', name: 'exports', visibility: 'private', files: { '2026-10/metrics.csv': 'window_start,requests,p95_ms\n2026-10-01T00:00:00Z,4120,184\n' } },

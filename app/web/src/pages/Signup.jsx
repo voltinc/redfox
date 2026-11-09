@@ -105,7 +105,7 @@ export default function Signup() {
       footer={(
         <>
           Already have an account?{' '}
-          <Link to="/login" className="font-medium text-accent hover:text-accent-hover">Sign in</Link>
+          <Link to="/login" className="font-medium text-accentInk hover:text-accent">Sign in</Link>
         </>
       )}
     >
@@ -114,7 +114,7 @@ export default function Signup() {
       ) : null}
 
       {invited ? (
-        <div className="mb-4 flex items-start gap-2 rounded-md border border-info/30 bg-info/[0.07] px-3 py-2 text-[11.5px] leading-5 text-[#b9d4ff]">
+        <div className="mb-4 flex items-start gap-2 rounded-md border border-info/30 bg-info/[0.07] px-3 py-2 text-[11.5px] leading-5 text-info">
           <Users size={13} className="mt-0.5 shrink-0" />
           <span>
             You are joining <strong className="font-medium">{invite.workspace?.name}</strong> ({invite.workspace?.region}) as {invite.role}.
@@ -123,7 +123,7 @@ export default function Signup() {
       ) : null}
 
       {inviteBlocked ? (
-        <div role="alert" className="mb-4 flex items-start gap-2 rounded-md border border-warn/30 bg-warn/[0.07] px-3 py-2 text-[11.5px] leading-5 text-[#f0d9a8]">
+        <div role="alert" className="mb-4 flex items-start gap-2 rounded-md border border-warn/30 bg-warn/[0.07] px-3 py-2 text-[11.5px] leading-5 text-warn">
           <AlertCircle size={13} className="mt-0.5 shrink-0" />
           <span>
             {inviteState === 'expired' ? 'This invitation has expired. Ask for a new link, or create a workspace of your own.'
@@ -135,14 +135,14 @@ export default function Signup() {
 
       <form onSubmit={submit} className="space-y-3.5" noValidate>
         {error && !Object.keys(fields).length ? (
-          <div role="alert" className="flex items-start gap-2 rounded-md border border-danger/30 bg-danger/[0.07] px-3 py-2 text-[12px] text-[#ffb4ae]">
+          <div role="alert" className="flex items-start gap-2 rounded-md border border-danger/30 bg-danger/[0.07] px-3 py-2 text-[12px] text-danger">
             <AlertCircle size={13} className="mt-0.5 shrink-0" />
             <span>{error}</span>
           </div>
         ) : null}
 
         <label className="block">
-          <span className="mb-1.5 block text-[11.5px] font-medium text-muted">Full name</span>
+          <span className="mb-1.5 block text-[11.5px] font-semibold uppercase tracking-[0.1em] text-dim">Full name</span>
           <input
             name="name"
             autoComplete="name"
@@ -151,13 +151,13 @@ export default function Signup() {
             onChange={(event) => setName(event.target.value)}
             placeholder="Alex Moreau"
             aria-invalid={Boolean(fields.name)}
-            className={cx('focus-ring h-9 w-full rounded-md border bg-panel px-3 text-[13px] text-fg placeholder:text-dim', fields.name ? 'border-danger/60' : 'border-line hover:border-line-strong')}
+            className={cx('focus-ring h-10 w-full rounded-lg border bg-panel px-3 text-[13.5px] text-fg placeholder:text-dim', fields.name ? 'border-danger/60' : 'border-line hover:border-line-strong')}
           />
           <FieldError>{fields.name}</FieldError>
         </label>
 
         <label className="block">
-          <span className="mb-1.5 block text-[11.5px] font-medium text-muted">Work email</span>
+          <span className="mb-1.5 block text-[11.5px] font-semibold uppercase tracking-[0.1em] text-dim">Work email</span>
           <input
             type="email"
             name="email"
@@ -168,13 +168,13 @@ export default function Signup() {
             placeholder="you@company.com"
             readOnly={invited && Boolean(invite?.email)}
             aria-invalid={Boolean(fields.email)}
-            className={cx('focus-ring h-9 w-full rounded-md border bg-panel px-3 text-[13px] text-fg placeholder:text-dim', fields.email ? 'border-danger/60' : 'border-line hover:border-line-strong', invited && invite?.email && 'text-muted')}
+            className={cx('focus-ring h-10 w-full rounded-lg border bg-panel px-3 text-[13.5px] text-fg placeholder:text-dim', fields.email ? 'border-danger/60' : 'border-line hover:border-line-strong', invited && invite?.email && 'text-muted')}
           />
           <FieldError>{fields.email}</FieldError>
         </label>
 
         <label className="block">
-          <span className="mb-1.5 block text-[11.5px] font-medium text-muted">Password</span>
+          <span className="mb-1.5 block text-[11.5px] font-semibold uppercase tracking-[0.1em] text-dim">Password</span>
           <span className="relative block">
             <input
               type={visible ? 'text' : 'password'}
@@ -185,7 +185,7 @@ export default function Signup() {
               onChange={(event) => setPassword(event.target.value)}
               placeholder="At least 10 characters"
               aria-invalid={Boolean(fields.password)}
-              className={cx('focus-ring h-9 w-full rounded-md border bg-panel pl-3 pr-9 text-[13px] text-fg placeholder:text-dim', fields.password ? 'border-danger/60' : 'border-line hover:border-line-strong')}
+              className={cx('focus-ring h-10 w-full rounded-lg border bg-panel pl-3 pr-9 text-[13.5px] text-fg placeholder:text-dim', fields.password ? 'border-danger/60' : 'border-line hover:border-line-strong')}
             />
             <button
               type="button"
@@ -212,7 +212,7 @@ export default function Signup() {
         {!invited ? (
           <label className="block">
             <span className="mb-1.5 flex items-baseline justify-between">
-              <span className="text-[11.5px] font-medium text-muted">Workspace name</span>
+              <span className="text-[11.5px] font-semibold uppercase tracking-[0.1em] text-dim">Workspace name</span>
               <span className="text-[10.5px] text-dim">optional</span>
             </span>
             <input
@@ -221,7 +221,7 @@ export default function Signup() {
               onChange={(event) => setWorkspace(event.target.value)}
               placeholder="Acme Engineering"
               aria-invalid={Boolean(fields.workspace)}
-              className={cx('focus-ring h-9 w-full rounded-md border bg-panel px-3 text-[13px] text-fg placeholder:text-dim', fields.workspace ? 'border-danger/60' : 'border-line hover:border-line-strong')}
+              className={cx('focus-ring h-10 w-full rounded-lg border bg-panel px-3 text-[13.5px] text-fg placeholder:text-dim', fields.workspace ? 'border-danger/60' : 'border-line hover:border-line-strong')}
             />
             <span className="mt-1 block text-[10.5px] text-dim">Defaults to your name. You can invite teammates afterwards.</span>
             <FieldError>{fields.workspace}</FieldError>
@@ -231,7 +231,7 @@ export default function Signup() {
         <button
           type="submit"
           disabled={busy || !name.trim() || !email.trim() || password.length < 10 || Boolean(inviteBlocked)}
-          className="focus-ring inline-flex h-9 w-full items-center justify-center gap-2 rounded-md bg-accent text-[13px] font-medium text-[#180b07] transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
+          className="focus-ring inline-flex h-10 w-full items-center justify-center gap-2 rounded-full bg-[color:var(--ink)] text-[13.5px] font-medium text-[color:var(--bg)] transition-colors hover:bg-accent hover:text-[color:var(--ink)] disabled:cursor-not-allowed disabled:opacity-45"
         >
           {busy ? <Loader2 size={14} className="animate-spin" /> : null}
           {busy ? 'Creating account' : invited ? `Join ${invite.workspace?.name}` : 'Create account'}

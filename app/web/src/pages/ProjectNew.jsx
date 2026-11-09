@@ -132,7 +132,7 @@ export default function ProjectNew() {
                   <button
                     type="button"
                     onClick={() => setSource('new')}
-                    className={cx('rounded-md border px-3 py-2.5 text-left transition-colors', source === 'new' ? 'border-accent/60 bg-[#181010]' : 'border-line bg-base hover:border-strong')}
+                    className={cx('rounded-md border px-3 py-2.5 text-left transition-colors', source === 'new' ? 'border-accent/60 bg-accent/10' : 'border-line bg-base hover:border-strong')}
                   >
                     <span className="flex items-center gap-1.5 text-sm font-medium text-fg"><Plus size={12} /> New repository</span>
                     <span className="mt-0.5 block text-xs text-dim">Creates an empty repository with a README and a main branch.</span>
@@ -140,7 +140,7 @@ export default function ProjectNew() {
                   <button
                     type="button"
                     onClick={() => setSource('import')}
-                    className={cx('rounded-md border px-3 py-2.5 text-left transition-colors', source === 'import' ? 'border-accent/60 bg-[#181010]' : 'border-line bg-base hover:border-strong')}
+                    className={cx('rounded-md border px-3 py-2.5 text-left transition-colors', source === 'import' ? 'border-accent/60 bg-accent/10' : 'border-line bg-base hover:border-strong')}
                   >
                     <span className="flex items-center gap-1.5 text-sm font-medium text-fg"><GitBranch size={12} /> Import repository</span>
                     <span className="mt-0.5 block text-xs text-dim">Connect one of the repositories already in this workspace.</span>
@@ -206,7 +206,7 @@ export default function ProjectNew() {
                     key={option.id}
                     type="button"
                     onClick={() => setRunner(option.id)}
-                    className={cx('rounded-md border px-3 py-2.5 text-left transition-colors', runner === option.id ? 'border-accent/60 bg-[#181010]' : 'border-line bg-base hover:border-strong')}
+                    className={cx('rounded-md border px-3 py-2.5 text-left transition-colors', runner === option.id ? 'border-accent/60 bg-accent/10' : 'border-line bg-base hover:border-strong')}
                   >
                     <span className="flex items-center justify-between">
                       <span className="flex items-center gap-1.5 text-sm font-medium text-fg">

@@ -160,7 +160,7 @@ export default function ProjectSettings() {
                       disabled={!writable}
                       onClick={() => setBuild((prev) => ({ ...prev, runner: option.id }))}
                       className={cx('rounded-md border px-3 py-2 text-left transition-colors disabled:opacity-60',
-                        build.runner === option.id ? 'border-accent/60 bg-[#181010]' : 'border-line bg-base hover:border-strong')}
+                        build.runner === option.id ? 'border-accent/60 bg-accent/10' : 'border-line bg-base hover:border-strong')}
                     >
                       <span className="flex items-center justify-between text-xs font-medium text-fg">
                         {option.label}
@@ -220,7 +220,7 @@ export default function ProjectSettings() {
             </div>
           </Panel>
 
-          <Panel id="danger" className="border-[#3a2222]">
+          <Panel id="danger" className="border-danger/30">
             <PanelHeader title="Danger zone" icon={AlertTriangle} description="Destructive actions cannot be undone." />
             <div className="space-y-3 p-4">
               <p className="text-sm text-muted">

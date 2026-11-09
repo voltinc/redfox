@@ -10,7 +10,7 @@ import {
 import { formatDateTime, relativeTime } from '../lib/format.js';
 import { useAuth } from '../lib/auth.jsx';
 
-const COLORS = ['#E4593B', '#58A6FF', '#3FB950', '#D29922', '#A371F7', '#F85149'];
+const COLORS = ['#FF7000', '#2454C8', '#1C7A3D', '#A25C00', '#7A3FB8', '#B8331F', '#191714'];
 
 export default function AccountSettings() {
   const toast = useToast();

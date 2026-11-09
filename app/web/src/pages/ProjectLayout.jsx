@@ -74,9 +74,9 @@ export default function ProjectLayout() {
         description={(
           <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span className="font-mono text-xs text-dim">{project.slug}</span>
-            <span className="text-line">·</span>
+            <span className="text-dim">·</span>
             <span className="capitalize">{project.framework}</span>
-            <span className="text-line">·</span>
+            <span className="text-dim">·</span>
             <a href={project.url} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-muted hover:text-accent">
               <Globe size={11} /> {project.url.replace('https://', '')}
             </a>

@@ -39,11 +39,11 @@ export function highlight(code, lang = 'text') {
   while (match) {
     out += escapeHtml(code.slice(last, match.index));
     const [full, comment, string, number, word] = match;
-    if (comment) out += `<span class="text-[#5b5b64] italic">${escapeHtml(full)}</span>`;
-    else if (string) out += `<span class="text-[#a5d6a7]">${escapeHtml(full)}</span>`;
-    else if (number) out += `<span class="text-[#d2a8ff]">${escapeHtml(full)}</span>`;
-    else if (word && KEYWORDS.has(word)) out += `<span class="text-[#e4593b]">${escapeHtml(full)}</span>`;
-    else if (word && code[match.index + full.length] === '(') out += `<span class="text-[#79c0ff]">${escapeHtml(full)}</span>`;
+    if (comment) out += `<span class="text-[#8a8175] italic">${escapeHtml(full)}</span>`;
+    else if (string) out += `<span class="text-[#1c7a3d]">${escapeHtml(full)}</span>`;
+    else if (number) out += `<span class="text-[#7a3fb8]">${escapeHtml(full)}</span>`;
+    else if (word && KEYWORDS.has(word)) out += `<span class="text-[#b4410a]">${escapeHtml(full)}</span>`;
+    else if (word && code[match.index + full.length] === '(') out += `<span class="text-[#2454c8]">${escapeHtml(full)}</span>`;
     else out += escapeHtml(full);
     last = match.index + full.length;
     match = re.exec(code);
@@ -58,7 +58,7 @@ export function CodeBlock({
   const [copied, setCopied] = useState(false);
   const lines = String(code ?? '').split('\n');
   return (
-    <div className={cx('overflow-hidden rounded-md border border-line bg-[#0b0b0d]', className)}>
+    <div className={cx('overflow-hidden rounded-md border border-line bg-[#f8f1e4]', className)}>
       <div className="flex items-center justify-between border-b border-line bg-panel px-2.5 py-1">
         <div className="flex min-w-0 items-center gap-2">
           <span className="truncate font-mono text-xs text-muted">{filename || language}</span>
@@ -102,7 +102,7 @@ export function DiffView({ patch, className }) {
   if (!patch) return null;
   const lines = String(patch).split('\n');
   return (
-    <div className={cx('overflow-x-auto rounded-md border border-line bg-[#0b0b0d] font-mono text-[11.5px] leading-[1.7]', className)}>
+    <div className={cx('overflow-x-auto rounded-md border border-line bg-[#f8f1e4] font-mono text-[11.5px] leading-[1.7]', className)}>
       {lines.map((line, index) => {
         const added = line.startsWith('+');
         const removed = line.startsWith('-');
@@ -112,8 +112,8 @@ export function DiffView({ patch, className }) {
             key={index}
             className={cx(
               'whitespace-pre px-3',
-              added && 'bg-[#0e1f13] text-[#7ee787]',
-              removed && 'bg-[#1f1214] text-[#ff9492]',
+              added && 'bg-success/10 text-success',
+              removed && 'bg-danger/10 text-danger',
               hunk && 'bg-raised text-dim',
               !added && !removed && !hunk && 'text-muted',
             )}
@@ -192,7 +192,7 @@ export function Markdown({ content, className }) {
   }, [content]);
 
   return (
-    <div className={cx('md text-sm leading-[1.65] text-[#d6d6da]', className)}>
+    <div className={cx('md text-sm leading-[1.65] text-muted', className)}>
       {blocks.map((block, index) => {
         if (block.kind === 'code') {
           return <CodeBlock key={index} code={block.body} language={block.lang || 'text'} maxHeight={320} className="my-2" />;
@@ -215,9 +215,9 @@ export function Markdown({ content, className }) {
 
 /* ---------------------------------------------------------------- terminal */
 const LEVEL_STYLE = {
-  error: 'text-[#ff9492]',
-  warn: 'text-[#e3b341]',
-  info: 'text-[#b9b9c0]',
+  error: 'text-danger',
+  warn: 'text-[#a25c00]',
+  info: 'text-muted',
   debug: 'text-dim',
 };
 
@@ -244,7 +244,7 @@ export function TerminalLog({
   const errorCount = logs.filter((l) => l.level === 'error').length;
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-md border border-line bg-[#08080a]">
+    <div className="flex flex-col overflow-hidden rounded-md border border-line bg-[#f8f1e4]">
       <div className="flex flex-wrap items-center gap-1.5 border-b border-line bg-panel px-2 py-1.5">
         <div className="relative">
           <Search size={11} className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-dim" />
@@ -291,9 +291,9 @@ export function TerminalLog({
           <div className="px-3 py-2 text-dim">{logs.length ? 'No lines match this filter.' : emptyLabel}</div>
         ) : (
           filtered.map((log) => (
-            <div key={`${log.seq}-${log.level}`} className="flex gap-2 px-2 hover:bg-[#101013]">
-              <span className="w-[86px] shrink-0 select-none tabular text-[#4d4d55]">{clockTime(log.ts)}</span>
-              {showPhase ? <span className="w-[52px] shrink-0 select-none truncate text-[#4d4d55]">{log.phase}</span> : null}
+            <div key={`${log.seq}-${log.level}`} className="flex gap-2 px-2 hover:bg-panel">
+              <span className="w-[86px] shrink-0 select-none tabular text-dim">{clockTime(log.ts)}</span>
+              {showPhase ? <span className="w-[52px] shrink-0 select-none truncate text-dim">{log.phase}</span> : null}
               <span className={cx('min-w-0 flex-1 whitespace-pre-wrap break-words', LEVEL_STYLE[log.level] || LEVEL_STYLE.info)}>
                 {log.message}
               </span>

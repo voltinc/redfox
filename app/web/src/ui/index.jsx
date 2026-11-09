@@ -7,14 +7,31 @@ import {
 import { cx, STATUS_TONE } from '../lib/format.js';
 import { copyText } from '../lib/format.js';
 
+
+/* Avatar initials and any other chip text need a foreground that survives the
+   background colour, whichever hex a user picked in account settings. */
+function readableInk(hex) {
+  const clean = String(hex).replace('#', '');
+  if (clean.length !== 6) return '#191714';
+  const lin = (offset) => {
+    const value = parseInt(clean.slice(offset, offset + 2), 16) / 255;
+    return value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
+  };
+  const luminance = 0.2126 * lin(0) + 0.7152 * lin(2) + 0.0722 * lin(4);
+  const withInk = (luminance + 0.05) / (0.0087 + 0.05);
+  const withWhite = 1.05 / (luminance + 0.05);
+  return withInk >= withWhite ? '#191714' : '#ffffff';
+}
+
 /* ------------------------------------------------------------------ buttons */
 const BUTTON_VARIANTS = {
-  primary: 'bg-accent text-[#0b0b0c] hover:bg-accent2 border border-transparent font-medium',
-  secondary: 'bg-raised text-fg border border-line hover:border-strong hover:bg-[#191a1d]',
-  ghost: 'bg-transparent text-muted border border-transparent hover:text-fg hover:bg-raised',
-  outline: 'bg-transparent text-fg border border-line hover:border-strong hover:bg-raised',
-  danger: 'bg-transparent text-danger border border-[#3a2222] hover:bg-[#1e1214] hover:border-danger/60',
-  'danger-solid': 'bg-danger text-[#0b0b0c] border border-transparent hover:opacity-90 font-medium',
+  primary: 'bg-[color:var(--ink)] text-[color:var(--bg)] hover:bg-[#2a2622] border border-transparent font-medium shadow-card',
+  accent: 'bg-accent text-[color:var(--ink)] hover:bg-accent-hover border border-transparent font-medium shadow-card',
+  secondary: 'bg-panel text-fg border border-line hover:border-strong hover:bg-panel-2 shadow-card',
+  ghost: 'bg-transparent text-muted border border-transparent hover:text-fg hover:bg-panel-2',
+  outline: 'bg-transparent text-fg border border-line-strong hover:bg-panel-2',
+  danger: 'bg-transparent text-danger border border-danger/35 hover:bg-danger/10',
+  'danger-solid': 'bg-danger text-white border border-transparent hover:opacity-90 font-medium',
 };
 const BUTTON_SIZES = {
   xs: 'h-6 px-2 text-xs gap-1 rounded',
@@ -48,7 +65,7 @@ export function IconButton({ label, icon: Icon, size = 14, className, tone = 'mu
   const tones = {
     muted: 'text-dim hover:text-fg hover:bg-raised',
     default: 'text-muted hover:text-fg hover:bg-raised',
-    danger: 'text-dim hover:text-danger hover:bg-[#1e1214]',
+    danger: 'text-dim hover:text-danger hover:bg-danger/10',
   };
   return (
     <button
@@ -65,12 +82,12 @@ export function IconButton({ label, icon: Icon, size = 14, className, tone = 'mu
 
 /* ------------------------------------------------------------------- badges */
 const TONES = {
-  neutral: 'border-line bg-raised text-muted',
-  success: 'border-[#1c3a22] bg-[#0f1c13] text-success',
-  danger: 'border-[#3d2222] bg-[#1d1213] text-danger',
-  warn: 'border-[#3a2f16] bg-[#1d1a10] text-warn',
-  info: 'border-[#1e3040] bg-[#101a22] text-info',
-  accent: 'border-[#43261e] bg-[#1d1210] text-accent',
+  neutral: 'border-line bg-panel-2 text-muted',
+  success: 'border-success/25 bg-success/[0.08] text-success',
+  danger: 'border-danger/25 bg-danger/[0.07] text-danger',
+  warn: 'border-warn/25 bg-warn/[0.09] text-warn',
+  info: 'border-info/25 bg-info/[0.06] text-info',
+  accent: 'border-accent/30 bg-accent/10 text-accentInk',
 };
 
 export function Badge({ tone = 'neutral', children, className, icon: Icon, mono }) {
@@ -191,7 +208,7 @@ export function Checkbox({ checked, onChange, label, className }) {
     <button type="button" onClick={() => onChange(!checked)} className={cx('flex items-center gap-2 text-sm text-muted hover:text-fg', className)}>
       <span className={cx(
         'flex h-3.5 w-3.5 items-center justify-center rounded-[3px] border transition-colors',
-        checked ? 'border-accent bg-accent text-[#0b0b0c]' : 'border-strong bg-base',
+        checked ? 'border-accent bg-accent text-[color:var(--ink)]' : 'border-strong bg-panel',
       )}>
         {checked ? <Check size={10} strokeWidth={3} /> : null}
       </span>
@@ -213,7 +230,7 @@ export function SegmentedControl({ options, value, onChange, className, size = '
             className={cx(
               'rounded px-2 transition-colors',
               size === 'sm' ? 'h-5 text-2xs' : 'h-[24px] text-xs',
-              active ? 'bg-raised text-fg shadow-[inset_0_0_0_1px_var(--line-strong)]' : 'text-muted hover:text-fg',
+              active ? 'bg-panel text-fg shadow-card ring-1 ring-line' : 'text-muted hover:text-fg',
             )}
           >
             {option.label}
@@ -227,7 +244,7 @@ export function SegmentedControl({ options, value, onChange, className, size = '
 /* ------------------------------------------------------------------ surfaces */
 export function Panel({ className, children, padded = false, ...props }) {
   return (
-    <section {...props} className={cx('rounded-lg border border-line bg-panel', padded && 'p-4', className)}>
+    <section {...props} className={cx('rounded-lg border border-line bg-panel shadow-card', padded && 'p-4', className)}>
       {children}
     </section>
   );
@@ -392,7 +409,7 @@ export function EmptyState({ icon: Icon, title, description, action, className, 
 export function ErrorState({ error, onRetry, className }) {
   return (
     <div className={cx('flex flex-col items-center justify-center px-6 py-12 text-center', className)}>
-      <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-md border border-[#3d2222] bg-[#1d1213] text-danger">
+      <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-md border border-danger/30 bg-danger/[0.07] text-danger">
         <AlertTriangle size={16} />
       </div>
       <h3 className="text-sm font-medium text-fg">Something went wrong</h3>
@@ -404,10 +421,11 @@ export function ErrorState({ error, onRetry, className }) {
 
 export function Banner({ tone = 'info', title, children, action, icon: IconOverride, className }) {
   const tones = {
-    info: 'border-[#1e3040] bg-[#0d151c] text-info',
-    warn: 'border-[#3a2f16] bg-[#17140d] text-warn',
-    danger: 'border-[#3d2222] bg-[#180f10] text-danger',
-    neutral: 'border-line bg-panel text-muted',
+    info: 'border-info/25 bg-info/[0.06] text-info',
+    warn: 'border-warn/30 bg-warn/[0.08] text-warn',
+    danger: 'border-danger/30 bg-danger/[0.07] text-danger',
+    success: 'border-success/30 bg-success/[0.07] text-success',
+    neutral: 'border-line bg-panel-2 text-muted',
   };
   const Icon = IconOverride || (tone === 'danger' || tone === 'warn' ? AlertTriangle : Info);
   return (
@@ -494,7 +512,7 @@ export function Menu({ trigger, children, align = 'right', width = 'w-56', class
       {open ? (
         <div
           className={cx(
-            'absolute z-40 mt-1 animate-fade-in rounded-md border border-line bg-[#101013] py-1 shadow-pop',
+            'absolute z-40 mt-1 animate-fade-in rounded-md border border-line bg-panel py-1 shadow-pop',
             align === 'right' ? 'right-0' : 'left-0', width,
           )}
           onClick={() => setOpen(false)}
@@ -509,7 +527,7 @@ export function Menu({ trigger, children, align = 'right', width = 'w-56', class
 export function MenuItem({ icon: Icon, children, onClick, danger, disabled, hint, to }) {
   const cls = cx(
     'flex w-full items-center gap-2 px-2.5 py-1.5 text-left text-sm transition-colors',
-    disabled ? 'cursor-not-allowed opacity-40' : danger ? 'text-danger hover:bg-[#1e1214]' : 'text-muted hover:bg-raised hover:text-fg',
+    disabled ? 'cursor-not-allowed opacity-40' : danger ? 'text-danger hover:bg-danger/10' : 'text-muted hover:bg-raised hover:text-fg',
   );
   if (to) {
     return (
@@ -562,8 +580,8 @@ export function ToastProvider({ children }) {
           <div
             key={toast.id}
             className={cx(
-              'pointer-events-auto flex animate-slide-up items-start gap-2 rounded-md border bg-[#121215] px-3 py-2 shadow-pop',
-              toast.tone === 'success' ? 'border-[#1c3a22]' : toast.tone === 'danger' ? 'border-[#3d2222]' : 'border-line',
+              'pointer-events-auto flex animate-slide-up items-start gap-2 rounded-md border bg-panel px-3 py-2 shadow-pop',
+              toast.tone === 'success' ? 'border-success/40' : toast.tone === 'danger' ? 'border-danger/40' : 'border-line',
             )}
           >
             <span className={cx('mt-[3px]', toast.tone === 'success' ? 'text-success' : toast.tone === 'danger' ? 'text-danger' : 'text-info')}>
@@ -652,9 +670,13 @@ export function Avatar({ name, color, size = 22, className }) {
     .toUpperCase();
   return (
     <span
-      className={cx('inline-flex shrink-0 items-center justify-center rounded-full font-medium text-[#0b0b0c]', className)}
+      className={cx('inline-flex shrink-0 items-center justify-center rounded-full font-semibold', className)}
       style={{
-        width: size, height: size, background: color || '#3a3a42', fontSize: Math.max(9, size * 0.4),
+        width: size,
+        height: size,
+        background: color || '#d8c9b1',
+        color: readableInk(color || '#d8c9b1'),
+        fontSize: Math.max(9, size * 0.4),
       }}
       title={name}
     >
@@ -668,7 +690,7 @@ export function Tooltip({ label, children }) {
 }
 
 export function Kbd({ children }) {
-  return <kbd className="rounded border border-line bg-raised px-1 font-mono text-[10px] leading-4 text-dim">{children}</kbd>;
+  return <kbd className="rounded border border-line bg-raised px-1 font-mono text-[10px] leading-4 text-muted">{children}</kbd>;
 }
 
 export function Sparkline({ values, width = 88, height = 22, tone = 'accent', className }) {

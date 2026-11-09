@@ -1,17 +1,11 @@
 /* LLM provider boundary.
 
-   Solene uses a hosted model only when a provider key is present in the
-   server environment. Without one, the caller uses Redfox's local analysis
-   engine and labels the answer accordingly.
-*/
+   Solene uses a real model only when a provider key is present in the
+   environment. There is no pretend model: if nothing is configured the caller
+   receives { configured: false } and the API answers with local analysis that is
+   labelled as such. */
 
 const PROVIDERS = [
-  {
-    id: 'gemini',
-    env: 'GEMINI_API_KEY',
-    model: process.env.GEMINI_MODEL || process.env.REDFOX_MODEL || 'gemini-2.5-flash',
-    label: 'Google Gemini',
-  },
   { id: 'openai', env: 'OPENAI_API_KEY', model: process.env.REDFOX_MODEL || 'gpt-4o-mini', label: 'OpenAI' },
   { id: 'anthropic', env: 'ANTHROPIC_API_KEY', model: process.env.REDFOX_MODEL || 'claude-3-5-sonnet-latest', label: 'Anthropic' },
   { id: 'openrouter', env: 'OPENROUTER_API_KEY', model: process.env.REDFOX_MODEL || 'anthropic/claude-3.5-sonnet', label: 'OpenRouter' },
@@ -26,37 +20,6 @@ export function providerInfo() {
 export async function complete({ system, messages, maxTokens = 1200 }) {
   const info = providerInfo();
   if (!info.configured) throw new Error('No model provider is configured');
-
-  if (info.provider === 'gemini') {
-    const key = process.env.GEMINI_API_KEY;
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(info.model)}:generateContent`;
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'x-goog-api-key': key,
-      },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: system }] },
-        contents: messages.map((message) => ({
-          role: message.role === 'assistant' ? 'model' : 'user',
-          parts: [{ text: String(message.content ?? '') }],
-        })),
-        generationConfig: { maxOutputTokens: maxTokens },
-      }),
-    });
-    if (!response.ok) {
-      const detail = (await response.text()).slice(0, 500);
-      throw new Error(`Google Gemini returned HTTP ${response.status}: ${detail}`);
-    }
-    const data = await response.json();
-    const answer = data.candidates?.[0]?.content?.parts
-      ?.map((part) => part.text || '')
-      .filter(Boolean)
-      .join('\n');
-    if (!answer) throw new Error('Google Gemini returned an empty response');
-    return answer;
-  }
 
   if (info.provider === 'anthropic') {
     const response = await fetch('https://api.anthropic.com/v1/messages', {

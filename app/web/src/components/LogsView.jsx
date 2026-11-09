@@ -143,7 +143,7 @@ export default function LogsView({ project, projects = [], onProjectChange, heig
                               {log.mode === 'demo' ? <span className="text-[9px] text-warn">sample</span> : null}
                             </span>
                           </Td>
-                          <Td><span className={cx('block max-w-[520px] truncate text-xs', log.level === 'error' ? 'text-[#ffb3b0]' : 'text-muted')}>{log.message}</span></Td>
+                          <Td><span className={cx('block max-w-[520px] truncate text-xs', log.level === 'error' ? 'text-danger' : 'text-muted')}>{log.message}</span></Td>
                           <Td><span className="block max-w-[150px] truncate font-mono text-2xs text-dim">{log.path || '—'}</span></Td>
                           <Td align="right">
                             {log.status_code ? (
@@ -157,7 +157,7 @@ export default function LogsView({ project, projects = [], onProjectChange, heig
                         </Tr>
                         {isOpen ? (
                           <tr>
-                            <td colSpan={8} className="border-b border-line bg-[#0b0b0d] px-3 py-2">
+                            <td colSpan={8} className="border-b border-line bg-[#f8f1e4] px-3 py-2">
                               <div className="grid gap-3 sm:grid-cols-4">
                                 <div><p className="text-2xs uppercase tracking-[0.06em] text-dim">Timestamp</p><p className="mt-0.5 font-mono text-2xs text-muted">{new Date(log.ts).toISOString()}</p></div>
                                 <div><p className="text-2xs uppercase tracking-[0.06em] text-dim">Project</p><p className="mt-0.5 text-2xs text-muted">{log.project_name || 'workspace'}</p></div>

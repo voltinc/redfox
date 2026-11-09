@@ -120,7 +120,7 @@ export default function Solene() {
 
   return (
     <div className="flex h-[calc(100vh-44px)]">
-      <aside className="hidden w-[230px] shrink-0 flex-col border-r border-line bg-[#0a0a0c] md:flex">
+      <aside className="hidden w-[230px] shrink-0 flex-col border-r border-line bg-panel md:flex">
         <div className="flex items-center justify-between border-b border-line px-3 py-2">
           <span className="flex items-center gap-1.5 text-xs font-medium text-fg"><Sparkles size={12} className="text-accent" /> Solene</span>
           <IconButton label="New conversation" icon={Plus} onClick={newConversation} />
@@ -178,7 +178,7 @@ export default function Solene() {
         </div>
 
         {mode === 'local' ? (
-          <div className="border-b border-[#3a2f16] bg-[#17140d] px-3 py-1.5 text-2xs text-warn">
+          <div className="border-b border-warn/30 bg-warn/10 px-3 py-1.5 text-2xs text-warn">
             No model provider is connected. Answers come from the deterministic analysis engine over your real logs, schema and configuration.
             Set <span className="font-mono">OPENAI_API_KEY</span>, <span className="font-mono">ANTHROPIC_API_KEY</span> or <span className="font-mono">OPENROUTER_API_KEY</span> to switch to a model.
           </div>

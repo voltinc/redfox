@@ -35,20 +35,20 @@ export default function Login() {
       footer={(
         <>
           New here?{' '}
-          <Link to="/signup" className="font-medium text-accent hover:text-accent-hover">Create an account</Link>
+          <Link to="/signup" className="font-medium text-accentInk hover:text-accent">Create an account</Link>
         </>
       )}
     >
       <form onSubmit={submit} className="space-y-3.5" noValidate>
         {error ? (
-          <div role="alert" className="flex items-start gap-2 rounded-md border border-danger/30 bg-danger/[0.07] px-3 py-2 text-[12px] text-[#ffb4ae]">
+          <div role="alert" className="flex items-start gap-2 rounded-lg border border-danger/30 bg-danger/[0.07] px-3 py-2 text-[12px] text-danger">
             <AlertCircle size={13} className="mt-0.5 shrink-0" />
             <span>{error}</span>
           </div>
         ) : null}
 
         <label className="block">
-          <span className="mb-1.5 block text-[11.5px] font-medium text-muted">Work email</span>
+          <span className="mb-1.5 block text-[11.5px] font-semibold uppercase tracking-[0.1em] text-dim">Work email</span>
           <input
             type="email"
             name="email"
@@ -57,13 +57,13 @@ export default function Login() {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             placeholder="you@company.com"
-            className="field focus-ring h-9 w-full rounded-md border border-line bg-panel px-3 text-[13px] text-fg placeholder:text-dim hover:border-line-strong"
+            className="field focus-ring h-10 w-full rounded-lg border border-line bg-panel px-3 text-[13.5px] text-fg placeholder:text-dim hover:border-line-strong"
           />
         </label>
 
         <label className="block">
           <span className="mb-1.5 flex items-baseline justify-between">
-            <span className="text-[11.5px] font-medium text-muted">Password</span>
+            <span className="text-[11.5px] font-semibold uppercase tracking-[0.1em] text-dim">Password</span>
           </span>
           <span className="relative block">
             <input
@@ -74,7 +74,7 @@ export default function Login() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               placeholder="Your password"
-              className="field focus-ring h-9 w-full rounded-md border border-line bg-panel pl-3 pr-9 text-[13px] text-fg placeholder:text-dim hover:border-line-strong"
+              className="field focus-ring h-10 w-full rounded-lg border border-line bg-panel pl-3 pr-9 text-[13.5px] text-fg placeholder:text-dim hover:border-line-strong"
             />
             <button
               type="button"
@@ -90,7 +90,7 @@ export default function Login() {
         <button
           type="submit"
           disabled={busy || !email.trim() || !password}
-          className="focus-ring inline-flex h-9 w-full items-center justify-center gap-2 rounded-md bg-accent text-[13px] font-medium text-[#180b07] transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
+          className="focus-ring inline-flex h-10 w-full items-center justify-center gap-2 rounded-full bg-[color:var(--ink)] text-[13.5px] font-medium text-[color:var(--bg)] transition-colors hover:bg-accent hover:text-[color:var(--ink)] disabled:cursor-not-allowed disabled:opacity-45"
         >
           {busy ? <Loader2 size={14} className="animate-spin" /> : null}
           {busy ? 'Signing in' : 'Sign in'}

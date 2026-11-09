@@ -152,7 +152,7 @@ export default function Docs() {
                 ))}
               </div>
               {section.code ? (
-                <pre className="mt-3 overflow-x-auto rounded-md border border-line bg-[#0b0b0d] px-3 py-2.5 font-mono text-[11.5px] leading-5 text-[#d7d7dc]">
+                <pre className="mt-3 overflow-x-auto rounded-md border border-line bg-[#f8f1e4] px-3 py-2.5 font-mono text-[11.5px] leading-5 text-muted">
                   {section.code}
                 </pre>
               ) : null}
@@ -161,7 +161,7 @@ export default function Docs() {
                   Need the full reference? The bundle ships README.md and docs/ARCHITECTURE.md with the storage
                   layout, adapter boundaries and bring-your-own-cloud path.
                 </p>
-                <Link to="/solene" className="mt-1.5 inline-block text-xs text-accent underline decoration-accent/40 underline-offset-2">
+                <Link to="/solene" className="mt-1.5 inline-block text-xs text-accentInk underline decoration-accentInk/40 underline-offset-2">
                   Ask Solene about this workspace
                 </Link>
               </div>

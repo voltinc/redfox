@@ -141,9 +141,9 @@ export default function DeploymentDetail() {
               <p className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted">
                 <span className="font-mono">{shortSha(deployment.commit_sha)}</span>
                 <span className="truncate">{deployment.commit_message}</span>
-                <span className="text-line">·</span>
+                <span className="text-dim">·</span>
                 <span className="flex items-center gap-1"><GitBranch size={10} /> {deployment.branch}</span>
-                <span className="text-line">·</span>
+                <span className="text-dim">·</span>
                 <span>{relativeTime(deployment.created_at)} by {deployment.actor}</span>
               </p>
             </div>
@@ -251,7 +251,7 @@ export default function DeploymentDetail() {
                       <p className="text-2xs uppercase tracking-[0.07em] text-dim">Evidence</p>
                       <div className="mt-1 space-y-1">
                         {analysis.evidence.map((item) => (
-                          <p key={item.seq} className="truncate rounded border border-line bg-[#0b0b0d] px-2 py-1 font-mono text-2xs text-[#ffb3b0]">
+                          <p key={item.seq} className="truncate rounded border border-line bg-[#f8f1e4] px-2 py-1 font-mono text-2xs text-danger">
                             {item.phase}: {item.message}
                           </p>
                         ))}

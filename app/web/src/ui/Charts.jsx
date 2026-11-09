@@ -83,7 +83,7 @@ export function AreaChart({
 
       {hover !== null && labels[hover] ? (
         <div
-          className="pointer-events-none absolute top-1 z-10 min-w-[110px] rounded border border-line bg-[#121215] px-2 py-1.5 text-2xs shadow-pop"
+          className="pointer-events-none absolute top-1 z-10 min-w-[110px] rounded border border-line bg-panel px-2 py-1.5 text-2xs shadow-pop"
           style={{ left: `${Math.min(78, (hover / (count - 1)) * 100)}%` }}
         >
           <div className="mb-1 text-dim">{labels[hover]}</div>

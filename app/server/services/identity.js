@@ -72,7 +72,7 @@ export function createAccount({ name, email, password, workspaceName, avatarColo
   if (existed) throw conflict('An account already exists with that email');
   const userId = id('usr');
   db.prepare('INSERT INTO users (id, email, name, password_hash, avatar_color, created_at) VALUES (?,?,?,?,?,?)')
-    .run(userId, email, name, hashPassword(password), avatarColor || '#E4593B', nowIso());
+    .run(userId, email, name, hashPassword(password), avatarColor || '#FF7000', nowIso());
   const user = db.prepare('SELECT id, email, name, avatar_color FROM users WHERE id = ?').get(userId);
   const workspace = createWorkspaceFor({ userId, workspaceName, name });
   db.prepare('INSERT INTO notifications (id, user_id, title, body, href, level, created_at) VALUES (?,?,?,?,?,?,?)')

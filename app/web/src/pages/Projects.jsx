@@ -97,7 +97,7 @@ export default function Projects() {
                         </div>
                         <div className="mt-0.5 flex items-center gap-1.5 font-mono text-2xs text-dim">
                           {project.slug}
-                          <span className="text-line">·</span>
+                          <span className="text-dim">·</span>
                           {project.production_branch}
                         </div>
                       </div>

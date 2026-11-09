@@ -151,7 +151,7 @@ export default function ApiExplorer() {
                     onChange={(event) => setBody(event.target.value)}
                     placeholder='{ "project": "atlas-web", "environment": "preview" }'
                     spellCheck={false}
-                    className="h-[92px] w-full resize-y bg-[#08080a] px-3 py-2 font-mono text-xs leading-5 text-fg placeholder:text-dim focus:outline-none"
+                    className="h-[92px] w-full resize-y bg-[#f8f1e4] px-3 py-2 font-mono text-xs leading-5 text-fg placeholder:text-dim focus:outline-none"
                   />
                 </div>
               ) : null}

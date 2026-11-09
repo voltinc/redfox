@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
   email         TEXT NOT NULL UNIQUE,
   name          TEXT NOT NULL,
   password_hash TEXT NOT NULL,
-  avatar_color  TEXT NOT NULL DEFAULT '#E4593B',
+  avatar_color  TEXT NOT NULL DEFAULT '#FF7000',
   created_at    TEXT NOT NULL
 );
 

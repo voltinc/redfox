@@ -18,9 +18,14 @@ export default {
         warn: 'var(--warn)',
         danger: 'var(--danger)',
         info: 'var(--info)',
+        ink: 'var(--ink)',
+        soft: 'var(--accent-soft)',
+        accentInk: 'var(--accent-strong)',
       },
       fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        sans: ['Instrument Sans', 'Inter', 'ui-sans-serif', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        display: ['Instrument Sans', 'Inter', 'sans-serif'],
+        serif: ['Instrument Serif', 'Georgia', 'serif'],
         mono: ['ui-monospace', 'SFMono-Regular', 'JetBrains Mono', 'Menlo', 'Consolas', 'monospace'],
       },
       fontSize: {
@@ -29,8 +34,11 @@ export default {
         sm: ['12.5px', '18px'],
         base: ['13.5px', '20px'],
       },
-      borderRadius: { DEFAULT: '6px', md: '6px', lg: '8px' },
-      boxShadow: { pop: '0 8px 28px -8px rgba(0,0,0,0.7), 0 0 0 1px var(--line)' },
+      borderRadius: { DEFAULT: '8px', md: '8px', lg: '12px', xl: '16px' },
+      boxShadow: {
+        pop: '0 16px 40px -18px rgba(35,27,18,0.35), 0 0 0 1px var(--line)',
+        card: 'var(--shadow-sm)',
+      },
       keyframes: {
         'fade-in': { from: { opacity: 0, transform: 'translateY(2px)' }, to: { opacity: 1, transform: 'none' } },
         'slide-up': { from: { opacity: 0, transform: 'translateY(6px)' }, to: { opacity: 1, transform: 'none' } },

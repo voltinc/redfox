@@ -99,11 +99,11 @@ export default function DatabaseView({ project, onProjectChange, projects = [] }
           <div className="flex items-center gap-1.5 rounded border border-line bg-panel px-2 py-1 text-2xs text-dim">
             <DatabaseIcon size={11} />
             <span className="font-mono text-muted">{meta?.engine} {meta?.engine_version}</span>
-            <span className="text-line">·</span>
+            <span className="text-dim">·</span>
             <span>{tables.length} tables</span>
-            <span className="text-line">·</span>
+            <span className="text-dim">·</span>
             <span className="tabular">{num(totalRows)} rows</span>
-            <span className="text-line">·</span>
+            <span className="text-dim">·</span>
             <span className="tabular">{meta?.size_label}</span>
           </div>
         </div>
@@ -179,7 +179,7 @@ export default function DatabaseView({ project, onProjectChange, projects = [] }
                           <Th key={column.name}>
                             <span className="flex items-center gap-1">
                               {column.name}
-                              {column.pk ? <span className="text-[9px] text-accent">PK</span> : null}
+                              {column.pk ? <span className="text-[9px] text-accentInk">PK</span> : null}
                             </span>
                             <span className="mt-0.5 block text-[9px] font-normal normal-case tracking-normal text-dim">{column.type || 'text'}</span>
                           </Th>
@@ -282,7 +282,7 @@ export default function DatabaseView({ project, onProjectChange, projects = [] }
               onKeyDown={(event) => { if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') runSql(); }}
               spellCheck={false}
               placeholder="select * from organizations limit 20;"
-              className="h-[168px] w-full resize-y bg-[#08080a] px-3 py-2 font-mono text-xs leading-6 text-fg placeholder:text-dim focus:outline-none"
+              className="h-[168px] w-full resize-y bg-[#f8f1e4] px-3 py-2 font-mono text-xs leading-6 text-fg placeholder:text-dim focus:outline-none"
             />
             <div className="border-t border-line">
               {sqlError ? (

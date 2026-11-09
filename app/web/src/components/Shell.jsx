@@ -44,7 +44,7 @@ function WorkspaceSwitcher() {
         width="w-60"
         trigger={(
           <button type="button" className="flex w-full items-center gap-2 rounded-md border border-line bg-panel px-2 py-1.5 text-left transition-colors hover:border-strong">
-            <span className="flex h-5 w-5 items-center justify-center rounded bg-[#1d1d22] text-[10px] font-semibold text-muted">
+            <span className="flex h-5 w-5 items-center justify-center rounded bg-accent/15 text-[10px] font-semibold text-accentInk">
               {workspace?.name?.slice(0, 1) || 'R'}
             </span>
             <span className="min-w-0 flex-1">
@@ -102,7 +102,7 @@ function NotificationsMenu() {
         <button type="button" className="relative flex h-7 w-7 items-center justify-center rounded text-muted transition-colors hover:bg-raised hover:text-fg" aria-label="Notifications">
           <Bell size={14} strokeWidth={1.9} />
           {notifications.unread ? (
-            <span className="absolute right-1 top-1 h-[5px] w-[5px] rounded-full bg-accent ring-2 ring-[#0b0b0d]" />
+            <span className="absolute right-1 top-1 h-[5px] w-[5px] rounded-full bg-accent ring-2 ring-panel" />
           ) : null}
         </button>
       )}
@@ -180,7 +180,7 @@ function SidebarContent({ onNavigate }) {
       <nav className="flex-1 overflow-y-auto px-2 pb-3">
         {NAV.map((section) => (
           <div key={section.group} className="mb-3">
-            <div className="px-2 pb-1 text-[10px] font-medium uppercase tracking-[0.1em] text-[#55555d]">{section.group}</div>
+            <div className="px-2 pb-1 text-[10px] font-medium uppercase tracking-[0.1em] text-dim">{section.group}</div>
             <div className="space-y-[1px]">
               {section.items.map((item) => {
                 const active = item.to === '/' ? location.pathname === '/' : location.pathname.startsWith(item.to);
@@ -192,7 +192,7 @@ function SidebarContent({ onNavigate }) {
                     onClick={onNavigate}
                     className={cx(
                       'group relative flex items-center gap-2 rounded px-2 py-[5px] text-sm transition-colors',
-                      active ? 'bg-[#17171b] text-fg' : 'text-muted hover:bg-[#131316] hover:text-fg',
+                      active ? 'bg-panel-2 text-fg' : 'text-muted hover:bg-panel-2/70 hover:text-fg',
                     )}
                   >
                     {active ? <span className="absolute left-0 top-1/2 h-[13px] w-[2px] -translate-y-1/2 rounded-r bg-accent" /> : null}
@@ -212,7 +212,7 @@ function SidebarContent({ onNavigate }) {
 function Topbar({ onOpenPalette, onOpenMobile }) {
   const { server, role } = useAuth();
   return (
-    <header className="sticky top-0 z-30 flex h-[44px] shrink-0 items-center gap-2 border-b border-line bg-[#0b0b0d]/95 px-3 backdrop-blur">
+    <header className="sticky top-0 z-30 flex h-[44px] shrink-0 items-center gap-2 border-b border-line bg-panel/90 px-3 backdrop-blur">
       <button type="button" onClick={onOpenMobile} className="flex h-7 w-7 items-center justify-center rounded text-muted hover:bg-raised hover:text-fg lg:hidden" aria-label="Open navigation">
         <MenuIcon size={15} />
       </button>
@@ -264,7 +264,7 @@ export function Shell() {
 
   return (
     <div className="flex h-full min-h-screen bg-base">
-      <aside className="hidden w-[232px] shrink-0 flex-col border-r border-line bg-[#0a0a0c] lg:flex">
+      <aside className="hidden w-[232px] shrink-0 flex-col border-r border-line bg-panel lg:flex">
         <SidebarContent />
         <SidebarFooter />
       </aside>
@@ -272,7 +272,7 @@ export function Shell() {
       {mobileOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-black/60" onClick={() => setMobileOpen(false)} />
-          <div className="absolute left-0 top-0 flex h-full w-[250px] animate-slide-up flex-col border-r border-line bg-[#0a0a0c]">
+          <div className="absolute left-0 top-0 flex h-full w-[250px] animate-slide-up flex-col border-r border-line bg-panel">
             <SidebarContent onNavigate={() => setMobileOpen(false)} />
             <SidebarFooter />
             <button type="button" onClick={() => setMobileOpen(false)} className="absolute right-2 top-2 text-dim" aria-label="Close navigation"><X size={15} /></button>

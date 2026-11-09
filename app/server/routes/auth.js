@@ -106,7 +106,7 @@ router.patch('/account', requireAuth, asyncRoute(async (req, res) => {
     db.prepare('UPDATE users SET name = ? WHERE id = ?').run(String(name).trim().slice(0, 80), req.user.id);
   }
   if (avatar_color !== undefined) {
-    if (!/^#[0-9a-fA-F]{6}$/.test(avatar_color)) throw bad('Avatar colour must be a hex value like #E4593B');
+    if (!/^#[0-9a-fA-F]{6}$/.test(avatar_color)) throw bad('Avatar colour must be a hex value like #FF7000');
     db.prepare('UPDATE users SET avatar_color = ? WHERE id = ?').run(avatar_color, req.user.id);
   }
   res.json({ user: db.prepare('SELECT id, email, name, avatar_color FROM users WHERE id = ?').get(req.user.id) });

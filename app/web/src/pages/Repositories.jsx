@@ -164,7 +164,7 @@ export default function Repositories() {
               </Select>
             </Field>
           </div>
-          {formError ? <div className="rounded border border-[#3d2222] bg-[#180f10] px-2.5 py-2 text-xs text-danger">{formError}</div> : null}
+          {formError ? <div className="rounded border border-danger/30 bg-danger/[0.07] px-2.5 py-2 text-xs text-danger">{formError}</div> : null}
         </div>
       </Modal>
     </>
