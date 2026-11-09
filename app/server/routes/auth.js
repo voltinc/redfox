@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { db, nowIso } from '../db.js';
 import { attemptLogin, createSession, destroySession, SESSION_COOKIE, requireAuth, workspaceContext } from '../auth.js';
 import { asyncRoute, bad } from '../util.js';
-import { providerInfo } from '../services/llm.js';
+import { providerInfo, availableProviders } from '../services/llm.js';
 import { hashPassword, verifyPassword } from '../crypto.js';
 import { enforceRateLimit } from '../rate-limit.js';
 import {
@@ -90,6 +90,7 @@ router.get('/auth/me', requireAuth, workspaceContext, asyncRoute(async (req, res
     workspaces: req.workspaces,
     notifications: { unread },
     llm: providerInfo(),
+    llm_providers: availableProviders(),
     server: { version: '0.9.0', data_dir: 'local', build: process.env.NODE_ENV || 'development' },
   });
 }));

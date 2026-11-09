@@ -101,7 +101,7 @@ export default function ProjectNew() {
         breadcrumb={<><span className="text-dim">Projects</span><span className="text-line">/</span><span>New</span></>}
       />
       <PageBody>
-        <div className="grid gap-2.5 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+        <div className="[&>*]:min-w-0 grid gap-2.5 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
           <div className="space-y-2.5">
             <Panel>
               <PanelHeader title="Details" description="How the project appears across the workspace." />

@@ -25,7 +25,7 @@ const STEPS = [
     title: 'Bring your team in',
     body: 'Invite people by link with an admin, developer or viewer role. Every API call is checked against the role, and every change lands in the audit log.',
     action: 'Invite a teammate',
-    to: '/settings/workspace',
+    to: '/settings',
     icon: Users,
   },
 ];
@@ -42,7 +42,7 @@ export default function GettingStarted({ firstName, workspace }) {
   const navigate = useNavigate();
 
   return (
-    <div className="grid gap-2.5 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+    <div className="[&>*]:min-w-0 grid gap-2.5 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
       <Panel className="overflow-hidden">
         <div className="border-b border-line px-4 py-4">
           <p className="text-2xs uppercase tracking-[0.1em] text-dim">Getting started</p>

@@ -83,7 +83,7 @@ export default function WorkspaceSettings() {
         badge={<Badge tone="neutral">{role}</Badge>}
       />
       <PageBody>
-        <div className="grid gap-2.5 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+        <div className="grid gap-2.5 [&>*]:min-w-0 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
           <div className="space-y-2.5">
             <Panel>
               <PanelHeader title="General" icon={Building2} description="Shared identity for everyone in this workspace." />

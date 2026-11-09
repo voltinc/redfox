@@ -186,7 +186,7 @@ export default function DeploymentDetail() {
           </Banner>
         ) : null}
 
-        <div className="grid gap-2.5 lg:grid-cols-[minmax(0,1fr)_286px]">
+        <div className="[&>*]:min-w-0 grid gap-2.5 lg:grid-cols-[minmax(0,1fr)_286px]">
           <div className="space-y-2.5">
             <Panel className="overflow-hidden">
               <div className="flex items-center justify-between border-b border-line px-3 py-2">

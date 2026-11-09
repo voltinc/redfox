@@ -1,26 +1,47 @@
 /* LLM provider boundary.
 
-   Solene uses a hosted model only when a provider key is present in the
-   server environment. Without one, the caller uses Redfox's local analysis
-   engine and labels the answer accordingly.
-*/
+   Solene uses a real model only when a provider key is present in the
+   environment. There is no pretend model: if nothing is configured the caller
+   receives { configured: false } and the API answers with local analysis that is
+   labelled as such. */
 
 const PROVIDERS = [
-  {
-    id: 'gemini',
-    env: 'GEMINI_API_KEY',
-    model: process.env.GEMINI_MODEL || process.env.REDFOX_MODEL || 'gemini-2.5-flash',
-    label: 'Google Gemini',
-  },
-  { id: 'openai', env: 'OPENAI_API_KEY', model: process.env.REDFOX_MODEL || 'gpt-4o-mini', label: 'OpenAI' },
-  { id: 'anthropic', env: 'ANTHROPIC_API_KEY', model: process.env.REDFOX_MODEL || 'claude-3-5-sonnet-latest', label: 'Anthropic' },
-  { id: 'openrouter', env: 'OPENROUTER_API_KEY', model: process.env.REDFOX_MODEL || 'anthropic/claude-3.5-sonnet', label: 'OpenRouter' },
+  { id: 'gemini', env: 'GEMINI_API_KEY', aliases: ['GOOGLE_API_KEY', 'GOOGLE_GENERATIVE_AI_API_KEY'], model: process.env.REDFOX_MODEL || 'gemini-2.5-flash', label: 'Google Gemini' },
+  { id: 'openai', env: 'OPENAI_API_KEY', aliases: [], model: process.env.REDFOX_MODEL || 'gpt-4o-mini', label: 'OpenAI' },
+  { id: 'anthropic', env: 'ANTHROPIC_API_KEY', aliases: [], model: process.env.REDFOX_MODEL || 'claude-3-5-sonnet-latest', label: 'Anthropic' },
+  { id: 'openrouter', env: 'OPENROUTER_API_KEY', aliases: [], model: process.env.REDFOX_MODEL || 'anthropic/claude-3.5-sonnet', label: 'OpenRouter' },
 ];
 
+function keyFor(provider) {
+  const names = [provider.env, ...(provider.aliases || [])];
+  for (const name of names) {
+    const value = process.env[name];
+    if (value && value.trim()) return { name, value: value.trim() };
+  }
+  return null;
+}
+
 export function providerInfo() {
-  const provider = PROVIDERS.find((p) => process.env[p.env]);
-  if (!provider) return { configured: false, provider: null, model: null };
-  return { configured: true, provider: provider.id, label: provider.label, model: provider.model };
+  for (const provider of PROVIDERS) {
+    const found = keyFor(provider);
+    if (found) {
+      return { configured: true, provider: provider.id, label: provider.label, model: provider.model, env: found.name };
+    }
+  }
+  return { configured: false, provider: null, model: null, env: null };
+}
+
+export function availableProviders() {
+  return PROVIDERS.map((provider) => {
+    const found = keyFor(provider);
+    return {
+      id: provider.id,
+      label: provider.label,
+      env: provider.env,
+      model: provider.model,
+      configured: Boolean(found),
+    };
+  });
 }
 
 export async function complete({ system, messages, maxTokens = 1200 }) {
@@ -28,34 +49,31 @@ export async function complete({ system, messages, maxTokens = 1200 }) {
   if (!info.configured) throw new Error('No model provider is configured');
 
   if (info.provider === 'gemini') {
-    const key = process.env.GEMINI_API_KEY;
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(info.model)}:generateContent`;
-    const response = await fetch(endpoint, {
+    const key = keyFor(PROVIDERS.find((p) => p.id === 'gemini')).value;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(info.model)}:generateContent`;
+    const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'x-goog-api-key': key,
-      },
+      headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: system }] },
-        contents: messages.map((message) => ({
-          role: message.role === 'assistant' ? 'model' : 'user',
-          parts: [{ text: String(message.content ?? '') }],
+        systemInstruction: { role: 'user', parts: [{ text: system }] },
+        contents: messages.map((m) => ({
+          role: m.role === 'assistant' ? 'model' : 'user',
+          parts: [{ text: m.content }],
         })),
-        generationConfig: { maxOutputTokens: maxTokens },
+        generationConfig: { maxOutputTokens: maxTokens, temperature: 0.4 },
       }),
     });
     if (!response.ok) {
-      const detail = (await response.text()).slice(0, 500);
-      throw new Error(`Google Gemini returned HTTP ${response.status}: ${detail}`);
+      throw new Error(`Gemini returned HTTP ${response.status}: ${(await response.text()).slice(0, 300)}`);
     }
     const data = await response.json();
-    const answer = data.candidates?.[0]?.content?.parts
-      ?.map((part) => part.text || '')
-      .filter(Boolean)
-      .join('\n');
-    if (!answer) throw new Error('Google Gemini returned an empty response');
-    return answer;
+    const parts = data.candidates?.[0]?.content?.parts || [];
+    const text = parts.map((part) => part.text || '').join('').trim();
+    if (!text) {
+      const reason = data.candidates?.[0]?.finishReason || data.promptFeedback?.blockReason || 'empty response';
+      throw new Error(`Gemini returned no text (${reason})`);
+    }
+    return text;
   }
 
   if (info.provider === 'anthropic') {

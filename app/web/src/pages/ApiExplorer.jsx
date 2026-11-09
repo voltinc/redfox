@@ -104,7 +104,7 @@ export default function ApiExplorer() {
         actions={<Button size="sm" variant="secondary" icon={KeyRound} onClick={() => setKeyOpen(true)}>Create API key</Button>}
       />
       <PageBody wide>
-        <div className="grid gap-2.5 lg:grid-cols-[240px_minmax(0,1fr)]">
+        <div className="[&>*]:min-w-0 grid gap-2.5 lg:grid-cols-[240px_minmax(0,1fr)]">
           <Panel className="h-fit overflow-hidden">
             <div className="border-b border-line px-3 py-2 text-2xs uppercase tracking-[0.07em] text-dim">Endpoints</div>
             <div className="max-h-[440px] overflow-y-auto py-1">

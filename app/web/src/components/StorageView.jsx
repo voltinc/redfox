@@ -127,7 +127,7 @@ export default function StorageView({ project, projects = [], onProjectChange })
           />
         </Panel>
       ) : (
-        <div className="grid gap-2.5 lg:grid-cols-[240px_minmax(0,1fr)]">
+        <div className="[&>*]:min-w-0 grid gap-2.5 lg:grid-cols-[240px_minmax(0,1fr)]">
           <Panel className="h-fit">
             <div className="border-b border-line px-3 py-2 text-2xs uppercase tracking-[0.07em] text-dim">Buckets</div>
             <div className="py-1">

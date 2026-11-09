@@ -14,7 +14,7 @@ const COLORS = ['#FF7000', '#2454C8', '#1C7A3D', '#A25C00', '#7A3FB8', '#B8331F'
 
 export default function AccountSettings() {
   const toast = useToast();
-  const { user, role, logout, refresh } = useAuth();
+  const { user, role, logout, refresh, llm, llmProviders } = useAuth();
   const { data, loading, error, reload } = useApi('/api/account');
   const [profile, setProfile] = useState(null);
   const [passwords, setPasswords] = useState({ current_password: '', new_password: '', confirm: '' });
@@ -81,7 +81,7 @@ export default function AccountSettings() {
     <>
       <PageHeader title="Account settings" description="Your profile, credentials and active sessions." badge={<Badge tone="neutral">{role}</Badge>} />
       <PageBody>
-        <div className="grid gap-2.5 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+        <div className="[&>*]:min-w-0 grid gap-2.5 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
           <div className="space-y-2.5">
             <Panel>
               <PanelHeader title="Profile" icon={User} description="Shown next to your commits, deployments and audit events." />
@@ -165,6 +165,39 @@ export default function AccountSettings() {
               <div className="border-t border-line px-3 py-2 text-2xs text-dim">
                 Sessions last 14 days. The current session is included in this list.
               </div>
+            </Panel>
+
+            <Panel className="p-4">
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <p className="text-xs font-medium text-fg">AI model provider</p>
+                  <p className="mt-1 text-2xs leading-4 text-dim">
+                    {llm?.configured
+                      ? `Solene is answering with ${llm.label} (${llm.model}) using ${llm.env}.`
+                      : 'No provider key is set, so Solene answers from local analysis of this workspace.'}
+                  </p>
+                </div>
+                <Badge tone={llm?.configured ? 'success' : 'neutral'}>{llm?.configured ? 'live model' : 'local'}</Badge>
+              </div>
+              <div className="mt-2.5 divide-y divide-line rounded-md border border-line">
+                {(llmProviders.length ? llmProviders : [
+                  { id: 'gemini', label: 'Google Gemini', env: 'GEMINI_API_KEY', model: 'gemini-2.5-flash', configured: false },
+                ]).map((provider) => (
+                  <div key={provider.id} className="flex items-center justify-between gap-3 px-3 py-1.5">
+                    <div className="min-w-0">
+                      <p className="truncate text-[11.5px] text-fg">{provider.label}</p>
+                      <p className="truncate font-mono text-2xs text-dim">{provider.env}</p>
+                    </div>
+                    <span className={provider.configured ? 'text-2xs text-success' : 'text-2xs text-dim'}>
+                      {provider.configured ? 'configured' : 'not set'}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-2 text-2xs leading-4 text-dim">
+                Keys are environment variables on the server, never stored in this database. Set GEMINI_API_KEY and
+                restart to switch provider.
+              </p>
             </Panel>
 
             <Panel className="p-4">

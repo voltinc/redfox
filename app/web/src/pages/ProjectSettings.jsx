@@ -76,7 +76,7 @@ export default function ProjectSettings() {
 
   return (
     <PageBody>
-      <div className="grid gap-2.5 lg:grid-cols-[170px_minmax(0,1fr)]">
+      <div className="[&>*]:min-w-0 grid gap-2.5 lg:grid-cols-[170px_minmax(0,1fr)]">
         <nav className="hidden lg:block">
           <div className="sticky top-[60px] space-y-[1px]">
             {SECTIONS.map((section) => (

@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './lib/auth.jsx';
 import { ToastProvider, Spinner } from './ui/index.jsx';
 import { Shell } from './components/Shell.jsx';
+import ErrorBoundary from './components/ErrorBoundary.jsx';
 import { Logo } from './components/Brand.jsx';
 
 import Landing from './pages/Landing.jsx';
@@ -29,6 +30,7 @@ import DatabasePage from './pages/Database.jsx';
 import Storage from './pages/Storage.jsx';
 import ApiExplorer from './pages/ApiExplorer.jsx';
 import Docs from './pages/Docs.jsx';
+import { DataHub, DocsHub, InfrastructureHub, ObservabilityHub, SettingsHub } from './pages/hubs.jsx';
 import Servers from './pages/Servers.jsx';
 import ServerDetail from './pages/ServerDetail.jsx';
 import Containers from './pages/Containers.jsx';
@@ -67,6 +69,13 @@ function PublicRoute({ children }) {
 /* The landing page and the console share the root path: signed-out visitors get
    the marketing page, everyone else gets the app. Any other console route sends
    an anonymous visitor to sign in, remembering where they were going. */
+
+/* Legacy links often carry a ?project= selection; keep it on the way through. */
+function RedirectKeepQuery({ to }) {
+  const { search } = useLocation();
+  return <Navigate to={{ pathname: to, search }} replace />;
+}
+
 function RootRoute() {
   const { user, loading } = useAuth();
   const location = useLocation();
@@ -83,6 +92,7 @@ export default function App() {
     <ToastProvider>
       <AuthProvider>
         <Suspense fallback={<BootScreen />}>
+          <ErrorBoundary>
           <Routes>
             <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
             <Route path="/signup" element={<PublicRoute><Signup /></PublicRoute>} />
@@ -105,22 +115,44 @@ export default function App() {
               <Route path="repositories" element={<Repositories />} />
               <Route path="repositories/:repoId" element={<Repository />} />
               <Route path="repositories/:repoId/commits/:sha" element={<CommitDetail />} />
-              <Route path="database" element={<DatabasePage />} />
-              <Route path="storage" element={<Storage />} />
-              <Route path="explorer" element={<ApiExplorer />} />
-              <Route path="docs" element={<Docs />} />
-              <Route path="servers" element={<Servers />} />
+              <Route path="data" element={<DataHub />}>
+                <Route index element={<DatabasePage />} />
+                <Route path="storage" element={<Storage />} />
+              </Route>
+              <Route path="observability" element={<ObservabilityHub />}>
+                <Route index element={<Logs />} />
+                <Route path="metrics" element={<Monitoring />} />
+              </Route>
+              <Route path="infrastructure" element={<InfrastructureHub />}>
+                <Route index element={<Servers />} />
+                <Route path="containers" element={<Containers />} />
+                <Route path="environment" element={<Environment />} />
+              </Route>
+              <Route path="docs" element={<DocsHub />}>
+                <Route index element={<Docs />} />
+                <Route path="api" element={<ApiExplorer />} />
+              </Route>
               <Route path="servers/:serverId" element={<ServerDetail />} />
-              <Route path="containers" element={<Containers />} />
-              <Route path="environment" element={<Environment />} />
-              <Route path="logs" element={<Logs />} />
-              <Route path="monitoring" element={<Monitoring />} />
               <Route path="solene" element={<Solene />} />
-              <Route path="settings/workspace" element={<WorkspaceSettings />} />
-              <Route path="settings/account" element={<AccountSettings />} />
+              <Route path="settings" element={<SettingsHub />}>
+                <Route index element={<WorkspaceSettings />} />
+                <Route path="account" element={<AccountSettings />} />
+              </Route>
+
+              {/* legacy URLs keep working so bookmarks and old links do not break */}
+              <Route path="database" element={<RedirectKeepQuery to="/data" />} />
+              <Route path="storage" element={<RedirectKeepQuery to="/data/storage" />} />
+              <Route path="explorer" element={<RedirectKeepQuery to="/docs/api" />} />
+              <Route path="servers" element={<RedirectKeepQuery to="/infrastructure" />} />
+              <Route path="containers" element={<RedirectKeepQuery to="/infrastructure/containers" />} />
+              <Route path="environment" element={<RedirectKeepQuery to="/infrastructure/environment" />} />
+              <Route path="logs" element={<RedirectKeepQuery to="/observability" />} />
+              <Route path="monitoring" element={<RedirectKeepQuery to="/observability/metrics" />} />
+              <Route path="settings/workspace" element={<RedirectKeepQuery to="/settings" />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
+          </ErrorBoundary>
         </Suspense>
       </AuthProvider>
     </ToastProvider>

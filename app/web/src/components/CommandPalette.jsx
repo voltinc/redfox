@@ -14,31 +14,22 @@ const NAV = [
     { label: 'Overview', to: '/', icon: LayoutDashboard },
     { label: 'Projects', to: '/projects', icon: Box },
     { label: 'Deployments', to: '/deployments', icon: Rocket },
-    { label: 'Domains', to: '/domains', icon: Globe },
-  ] },
-  { group: 'Development', items: [
     { label: 'Repositories', to: '/repositories', icon: GitBranch },
-    { label: 'Database', to: '/database', icon: Database },
-    { label: 'Storage', to: '/storage', icon: HardDrive },
-    { label: 'API Explorer', to: '/explorer', icon: FileCode2 },
-    { label: 'Documentation', to: '/docs', icon: BookOpen },
   ] },
-  { group: 'Infrastructure', items: [
-    { label: 'Servers', to: '/servers', icon: Server },
-    { label: 'Containers', to: '/containers', icon: Container },
-    { label: 'Environment Variables', to: '/environment', icon: KeyRound },
-    { label: 'Logs', to: '/logs', icon: ScrollText },
-    { label: 'Monitoring', to: '/monitoring', icon: Activity },
+  { group: 'Platform', items: [
+    { label: 'Data', to: '/data', icon: Database },
+    { label: 'Observability', to: '/observability', icon: Activity },
+    { label: 'Infrastructure', to: '/infrastructure', icon: Server },
+    { label: 'Domains', to: '/domains', icon: Globe },
+    { label: 'Documentation', to: '/docs', icon: BookOpen },
   ] },
   { group: 'AI', items: [
     { label: 'Solene', to: '/solene', icon: Sparkles },
   ] },
-  { group: 'Preferences', items: [
-    { label: 'Workspace Settings', to: '/settings/workspace', icon: Settings },
-    { label: 'Account Settings', to: '/settings/account', icon: UserCog },
+  { group: 'Settings', items: [
+    { label: 'Settings', to: '/settings', icon: Settings },
   ] },
 ];
-
 export function CommandPalette({ open, onClose }) {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');

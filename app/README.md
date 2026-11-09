@@ -52,7 +52,7 @@ anyone: it encrypts environment-variable values and API keys.
 | Storage | Buckets and files stored on disk with checksums, signed download URLs, access policies, usage accounting. |
 | Environment variables | AES-256-GCM encryption at rest, per-environment scoping, masked by default, explicit reveal, copy. |
 | Infrastructure | Server, container and monitoring views backed by stored state; actions are refused when no runtime is connected instead of pretending. |
-| Solene | Chat with a real local analysis engine over your deployment logs, schema and configuration. Uses a hosted model only if `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` or `OPENROUTER_API_KEY` is set. |
+| Solene | Chat with a real local analysis engine over your deployment logs, schema and configuration. Uses a hosted model only if `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` or `OPENROUTER_API_KEY` is set. |
 | API Explorer | Lists the live REST surface, endpoints and example payloads, pulls a real API key. |
 | Documentation | An in-product reference at `/docs` covering deploys, environments, databases, storage, API keys, roles and operations. |
 | Public site | A marketing landing page with real screenshots of the running console, sign-in and sign-up routes. |
@@ -107,8 +107,9 @@ and S3 live in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 | `REDFOX_SECRET_KEY` | Key material for environment-variable encryption. Set in production. |
 | `REDFOX_BUILD_DIR` | Build workspace root (default: system temp). Kept outside the app tree so npm cannot inherit Redfox's own manifest. |
 | `REDFOX_BUILD_TIMEOUT_MS` | Per-command build timeout (default 180000). |
-| `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` / `OPENROUTER_API_KEY` | Enables hosted Solene answers. |
-| `REDFOX_MODEL` | Model name override for the selected provider. |
+| `GEMINI_API_KEY` | Enables hosted Solene answers on Google Gemini (default `gemini-2.5-flash`). `GOOGLE_API_KEY` works as an alias. |
+| `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` / `OPENROUTER_API_KEY` | Alternative hosted providers; Gemini wins when several keys are present. |
+| `REDFOX_MODEL` | Model name override for the selected provider, e.g. `gemini-2.5-pro`. |
 | `DOCKER_HOST` | Enables real container controls when a Docker API endpoint is reachable. |
 
 ## Safety notes
@@ -136,3 +137,28 @@ The browser harness used during development (a 30-route sweep for console errors
 layout overflow, plus end-to-end flows for login, project creation, deployment,
 environment variables, SQL, storage, git commits, domains, Solene and deletion) runs on
 Playwright and is kept outside this source bundle.
+
+## Navigation
+
+The console groups related surfaces into five tabbed hubs so the sidebar stays short:
+
+| Hub | Tabs | Legacy URLs |
+| --- | --- | --- |
+| Data | SQL databases, object storage | `/database`, `/storage` redirect |
+| Observability | Logs, metrics | `/logs`, `/monitoring` |
+| Infrastructure | Servers, containers, environment | `/servers`, `/containers`, `/environment` |
+| Documentation | Guide, API reference | `/explorer` |
+| Settings | Workspace, account | `/settings/workspace` |
+
+Old links keep working: every legacy path redirects to its hub and carries any `?project=` selection through.
+
+## Recovering access
+
+There is no outbound mail, so passwords are reset on the host:
+
+```bash
+npm run reset-password -- you@company.com          # generates a password
+npm run reset-password -- you@company.com newpass  # or set one
+```
+
+The command rewrites the hash with scrypt and deletes that user's sessions, so anyone already signed in is logged out.

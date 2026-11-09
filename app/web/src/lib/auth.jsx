@@ -45,6 +45,7 @@ export function AuthProvider({ children }) {
     workspaces: data?.workspaces || [],
     role: data?.role || null,
     llm: data?.llm || null,
+    llmProviders: data?.llm_providers || [],
     server: data?.server || null,
     loading,
     error,

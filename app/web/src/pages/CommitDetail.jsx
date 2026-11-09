@@ -37,7 +37,7 @@ export default function CommitDetail() {
         actions={<Link to={`/repositories/${repoId}?tab=commits`} className="inline-flex h-7 items-center gap-1.5 rounded border border-line bg-panel px-2.5 text-sm text-muted hover:border-strong hover:text-fg"><ArrowLeft size={12} /> All commits</Link>}
       />
       <PageBody>
-        <div className="grid gap-2.5 lg:grid-cols-[minmax(0,1fr)_240px]">
+        <div className="[&>*]:min-w-0 grid gap-2.5 lg:grid-cols-[minmax(0,1fr)_240px]">
           <div className="space-y-2.5">
             <Panel className="overflow-hidden">
               <PanelHeader title={`${files.length} file${files.length === 1 ? '' : 's'} changed`} icon={GitCommitHorizontal} dense />

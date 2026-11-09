@@ -47,7 +47,7 @@ export default function ServerDetail() {
     try {
       await del(`/api/servers/${serverId}`);
       toast.success('Server removed', server.name);
-      navigate('/servers');
+      navigate('/infrastructure');
     } catch (err) {
       toast.error('Could not remove server', err.message);
     } finally {
@@ -70,7 +70,7 @@ export default function ServerDetail() {
         description={`${server.provider} · ${server.region} · ${server.host || server.docker_endpoint || 'no endpoint'}`}
         actions={(
           <>
-            <Button size="sm" variant="secondary" icon={ArrowLeft} onClick={() => navigate('/servers')}>Back</Button>
+            <Button size="sm" variant="secondary" icon={ArrowLeft} onClick={() => navigate('/infrastructure')}>Back</Button>
             <Button size="sm" variant="secondary" icon={RefreshCw} loading={busy} onClick={probe}>Probe host</Button>
             <Button size="sm" variant="danger" icon={Trash2} disabled={!canAdmin(role) || server.mode === 'local'} onClick={() => setRemoveOpen(true)}>Remove</Button>
           </>

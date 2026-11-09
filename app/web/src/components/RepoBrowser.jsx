@@ -51,7 +51,7 @@ export default function RepoBrowser({ repoId, branches = [], branch: initialBran
   const parts = filePath ? filePath.split('/') : dir ? dir.split('/') : [];
 
   return (
-    <div className="grid gap-2.5 lg:grid-cols-[260px_minmax(0,1fr)]">
+    <div className="[&>*]:min-w-0 grid gap-2.5 lg:grid-cols-[260px_minmax(0,1fr)]">
       <Panel className="h-fit overflow-hidden">
         <div className="border-b border-line px-2 py-1.5">
           <div className="relative">

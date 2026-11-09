@@ -11,7 +11,7 @@ const PROOF = [
 
 export default function AuthLayout({ title, subtitle, children, footer, wide = false }) {
   return (
-    <div className="grid min-h-screen overflow-x-hidden bg-base lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]">
+    <div className="[&>*]:min-w-0 grid min-h-screen overflow-x-hidden bg-base lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]">
       <div className="flex flex-col px-5 py-6 sm:px-10">
         <div className="flex items-center justify-between">
           <Link to="/" className="focus-ring rounded-md" aria-label="Redfox home">

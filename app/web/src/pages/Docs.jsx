@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import {
-  BookOpen, Boxes, Database, Globe, HardDrive, KeyRound, Rocket, ScrollText, ShieldCheck, Terminal, Users,
+  BookOpen, Boxes, Database, Globe, HardDrive, KeyRound, Rocket, ScrollText, ShieldCheck, Sparkles, Terminal, Users,
 } from 'lucide-react';
 import { PageBody } from '../components/Shell.jsx';
 import { Badge, Panel, PageHeader } from '../ui/index.jsx';
@@ -95,6 +95,26 @@ const SECTIONS = [
     ],
   },
   {
+    id: 'ai',
+    title: 'Model providers',
+    icon: Sparkles,
+    body: [
+      'Solene answers from local workspace analysis unless a model key is present. Set one of GEMINI_API_KEY, OPENAI_API_KEY, ANTHROPIC_API_KEY or OPENROUTER_API_KEY in the environment and restart the server; the provider badge in the sidebar turns orange.',
+      'Gemini is the default when GEMINI_API_KEY is set, using gemini-2.5-flash. Override the model for any provider with REDFOX_MODEL. Keys are read from the environment only, never stored in the database and never shown in the interface.',
+    ],
+    code: `# .env\nGEMINI_API_KEY=your-key\n# optional\nREDFOX_MODEL=gemini-2.5-pro`,
+  },
+  {
+    id: 'recovery',
+    title: 'Recovering access',
+    icon: KeyRound,
+    body: [
+      'This deployment has no outbound mail, so password recovery is an operator action rather than an email link. Run the reset command on the host; it rewrites the hash and signs every existing session out.',
+      'If you cannot reach the host, any workspace owner can reset a member password from Workspace settings. For a locked-out sole owner, the command below is the only route back in, which is why it runs next to the database rather than in the browser.',
+    ],
+    code: `npm run reset-password -- you@company.com\n# or let it generate one\nnpm run reset-password -- you@company.com`,
+  },
+  {
     id: 'team',
     title: 'Team and invitations',
     icon: Users,
@@ -106,8 +126,15 @@ const SECTIONS = [
 ];
 
 export default function Docs() {
+  const { hash } = useLocation();
   const [active, setActive] = useState(SECTIONS[0].id);
   const section = SECTIONS.find((item) => item.id === active) || SECTIONS[0];
+
+  // Deep links such as /docs#recovery open the matching section.
+  useEffect(() => {
+    const id = String(hash || '').replace('#', '');
+    if (id && SECTIONS.some((item) => item.id === id)) setActive(id);
+  }, [hash]);
 
   return (
     <>
@@ -117,7 +144,7 @@ export default function Docs() {
         actions={<Badge tone="neutral">v0.9</Badge>}
       />
       <PageBody>
-        <div className="grid gap-2.5 lg:grid-cols-[210px_minmax(0,1fr)]">
+        <div className="[&>*]:min-w-0 grid gap-2.5 lg:grid-cols-[210px_minmax(0,1fr)]">
           <Panel className="h-fit overflow-hidden lg:sticky lg:top-3">
             <div className="flex items-center gap-1.5 border-b border-line px-3 py-2">
               <BookOpen size={12} className="text-dim" />

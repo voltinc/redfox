@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AlertCircle, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useAuth } from '../lib/auth.jsx';
@@ -13,13 +13,25 @@ export default function Login() {
   const [visible, setVisible] = useState(false);
   const [error, setError] = useState(null);
   const [busy, setBusy] = useState(false);
+  const [capsLock, setCapsLock] = useState(false);
+  const formRef = useRef(null);
 
   const submit = async (event) => {
     event.preventDefault();
+    if (busy) return;
+    // Read the live field values: password managers can fill the DOM without
+    // firing change events, so React state alone would submit empty credentials.
+    const form = formRef.current;
+    const enteredEmail = String(form?.email?.value ?? email).trim();
+    const enteredPassword = String(form?.password?.value ?? password);
+    if (!enteredEmail || !enteredPassword) {
+      setError('Enter your email and password to continue.');
+      return;
+    }
     setBusy(true);
     setError(null);
     try {
-      await login(email.trim(), password);
+      await login(enteredEmail, enteredPassword);
       const next = location.state?.from;
       navigate(next && next !== '/login' ? next : '/', { replace: true });
     } catch (err) {
@@ -39,7 +51,7 @@ export default function Login() {
         </>
       )}
     >
-      <form onSubmit={submit} className="space-y-3.5" noValidate>
+      <form ref={formRef} onSubmit={submit} className="space-y-3.5" noValidate>
         {error ? (
           <div role="alert" className="flex items-start gap-2 rounded-lg border border-danger/30 bg-danger/[0.07] px-3 py-2 text-[12px] text-danger">
             <AlertCircle size={13} className="mt-0.5 shrink-0" />
@@ -52,7 +64,8 @@ export default function Login() {
           <input
             type="email"
             name="email"
-            autoComplete="email"
+            autoComplete="username"
+            autoFocus
             required
             value={email}
             onChange={(event) => setEmail(event.target.value)}
@@ -73,6 +86,7 @@ export default function Login() {
               required
               value={password}
               onChange={(event) => setPassword(event.target.value)}
+              onKeyUp={(event) => setCapsLock(event.getModifierState?.('CapsLock') || false)}
               placeholder="Your password"
               className="field focus-ring h-10 w-full rounded-lg border border-line bg-panel pl-3 pr-9 text-[13.5px] text-fg placeholder:text-dim hover:border-line-strong"
             />
@@ -89,16 +103,22 @@ export default function Login() {
 
         <button
           type="submit"
-          disabled={busy || !email.trim() || !password}
+          disabled={busy}
           className="focus-ring inline-flex h-10 w-full items-center justify-center gap-2 rounded-full bg-[color:var(--ink)] text-[13.5px] font-medium text-[color:var(--bg)] transition-colors hover:bg-accent hover:text-[color:var(--ink)] disabled:cursor-not-allowed disabled:opacity-45"
         >
           {busy ? <Loader2 size={14} className="animate-spin" /> : null}
           {busy ? 'Signing in' : 'Sign in'}
         </button>
 
+        {capsLock ? (
+          <p className="flex items-center gap-1.5 text-[11px] text-warn">
+            <AlertCircle size={12} /> Caps Lock is on
+          </p>
+        ) : null}
+
         <p className="pt-1 text-[11px] leading-5 text-dim">
-          Sessions last 14 days and can be revoked from Account settings. Forgotten passwords are reset by
-          an instance administrator, since this deployment has no outbound mail configured.
+          Sessions last 14 days and can be revoked from Account settings.{' '}
+          <Link to="/docs#recovery" className="text-accentInk hover:text-accent">Locked out?</Link>
         </p>
       </form>
     </AuthLayout>

@@ -21,7 +21,7 @@ export default function ProjectOverview() {
 
   return (
     <PageBody>
-      <div className="grid gap-2.5 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
+      <div className="[&>*]:min-w-0 grid gap-2.5 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
         <div className="space-y-2.5">
           <Panel>
             <PanelHeader

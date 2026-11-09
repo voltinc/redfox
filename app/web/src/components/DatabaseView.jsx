@@ -119,7 +119,7 @@ export default function DatabaseView({ project, onProjectChange, projects = [] }
       </div>
 
       {tab === 'tables' ? (
-        <div className="grid gap-2.5 lg:grid-cols-[210px_minmax(0,1fr)]">
+        <div className="[&>*]:min-w-0 grid gap-2.5 lg:grid-cols-[210px_minmax(0,1fr)]">
           <Panel className="h-fit">
             <div className="border-b border-line px-3 py-2 text-2xs uppercase tracking-[0.07em] text-dim">Tables</div>
             <div className="max-h-[520px] overflow-y-auto py-1">
@@ -261,7 +261,7 @@ export default function DatabaseView({ project, onProjectChange, projects = [] }
       ) : null}
 
       {tab === 'sql' ? (
-        <div className="grid gap-2.5 lg:grid-cols-[minmax(0,1fr)_260px]">
+        <div className="[&>*]:min-w-0 grid gap-2.5 lg:grid-cols-[minmax(0,1fr)_260px]">
           <Panel className="overflow-hidden">
             <div className="flex flex-wrap items-center gap-1.5 border-b border-line px-3 py-2">
               <Terminal size={12} className="text-dim" />

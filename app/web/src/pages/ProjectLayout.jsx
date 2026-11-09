@@ -96,7 +96,7 @@ export default function ProjectLayout() {
               <MenuItem icon={GitBranch} to={`/projects/${project.slug}/repository`}>Repository</MenuItem>
               <MenuItem icon={Settings} to={`/projects/${project.slug}/settings`}>Project settings</MenuItem>
               <MenuItem icon={Globe} to={`/projects/${project.slug}/settings#domains`}>Domains</MenuItem>
-              <MenuItem icon={ArrowUpRight} onClick={() => navigate('/monitoring')}>Monitoring</MenuItem>
+              <MenuItem icon={ArrowUpRight} onClick={() => navigate('/observability/metrics')}>Monitoring</MenuItem>
               <MenuItem icon={project.status === 'active' ? Pause : Play} onClick={toggleStatus} disabled={!writable || busy}>
                 {project.status === 'active' ? 'Pause project' : 'Resume project'}
               </MenuItem>

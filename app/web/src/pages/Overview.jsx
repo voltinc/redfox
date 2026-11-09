@@ -19,7 +19,7 @@ import { bytes, cx, duration, num, relativeTime, shortSha } from '../lib/format.
 const QUICK_ACTIONS = [
   { label: 'New project', to: '/projects/new', icon: Plus },
   { label: 'Browse repositories', to: '/repositories', icon: GitBranch },
-  { label: 'Open SQL editor', to: '/database', icon: Database },
+  { label: 'Open SQL editor', to: '/data', icon: Database },
   { label: 'Ask Solene', to: '/solene', icon: Sparkles },
 ];
 
@@ -57,7 +57,7 @@ export default function Overview() {
         description={`${workspace?.name} · ${projects.length} projects · ${stats.repositories ?? 0} repositories · region ${workspace?.region}`}
         actions={(
           <>
-            <Button size="sm" variant="secondary" icon={Activity} onClick={() => navigate('/monitoring')}>Monitoring</Button>
+            <Button size="sm" variant="secondary" icon={Activity} onClick={() => navigate('/observability/metrics')}>Monitoring</Button>
             <Button size="sm" variant="primary" icon={Rocket} onClick={() => setDeployOpen(true)}>Deploy</Button>
           </>
         )}
@@ -117,11 +117,11 @@ export default function Overview() {
                 value={`${stats.servers_connected ?? 0}/${infrastructure.servers.length}`}
                 hint={`${stats.containers_running ?? 0} of ${stats.containers_total ?? 0} containers running`}
                 icon={Server}
-                onClick={() => navigate('/servers')}
+                onClick={() => navigate('/infrastructure')}
               />
             </div>
 
-            <div className="mt-2.5 grid gap-2.5 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
+            <div className="[&>*]:min-w-0 mt-2.5 grid gap-2.5 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
               <Panel>
                 <div className="flex items-start justify-between border-b border-line px-4 py-2.5">
                   <div>
@@ -191,7 +191,7 @@ export default function Overview() {
               </Panel>
             </div>
 
-            <div className="mt-2.5 grid gap-2.5 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
+            <div className="[&>*]:min-w-0 mt-2.5 grid gap-2.5 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
               <Panel>
                 <div className="flex items-center justify-between border-b border-line px-4 py-2.5">
                   <h2 className="text-sm font-medium text-fg">Projects</h2>
