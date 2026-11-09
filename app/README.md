@@ -41,7 +41,9 @@ anyone: it encrypts environment-variable values and API keys.
 
 | Area | Behaviour |
 | --- | --- |
-| Authentication | Email + password, scrypt hashes, HTTP-only session cookies, workspaces, four roles (owner, admin, developer, viewer), audit log. |
+| Authentication | Email + password with scrypt hashes, HTTP-only session cookies, self-serve signup, rate-limited login and registration, four roles (owner, admin, developer, viewer), audit log. |
+| Workspaces | Multi-workspace membership, workspace switching, expiring invitation links (14 days) with role selection, revoke, invite-aware signup that joins the invited workspace. |
+| Onboarding | A new account starts empty, with a guided first-project flow instead of sample data. |
 | Projects | Create, edit, delete with typed confirmation, framework presets, build command, output directory, activity feed, per-project tabs. |
 | Git hosting | Native repository layer: repositories, branches, commits, file trees, file read/write, webhooks with secrets, remote configuration. Real objects, real history. |
 | Deployments | A real local build runner: checks out the branch, injects environment variables, runs install and build, publishes artefacts, serves them at `/preview/<id>/`. Statuses, logs, redeploy, rollback, promote, cancel. |
@@ -52,6 +54,8 @@ anyone: it encrypts environment-variable values and API keys.
 | Infrastructure | Server, container and monitoring views backed by stored state; actions are refused when no runtime is connected instead of pretending. |
 | Solene | Chat with a real local analysis engine over your deployment logs, schema and configuration. Uses a hosted model only if `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` or `OPENROUTER_API_KEY` is set. |
 | API Explorer | Lists the live REST surface, endpoints and example payloads, pulls a real API key. |
+| Documentation | An in-product reference at `/docs` covering deploys, environments, databases, storage, API keys, roles and operations. |
+| Public site | A marketing landing page with real screenshots of the running console, sign-in and sign-up routes. |
 
 ## Honest boundaries
 

@@ -24,7 +24,7 @@ const BUTTON_SIZES = {
 };
 
 export function Button({
-  variant = 'secondary', size = 'md', className, loading, icon: Icon, children, iconRight, ...props
+  variant = 'secondary', size = 'md', className, loading, icon: Icon, children, iconRight: IconRight, ...props
 }) {
   return (
     <button
@@ -39,7 +39,7 @@ export function Button({
     >
       {loading ? <Loader2 size={13} className="animate-spin" /> : Icon ? <Icon size={13} strokeWidth={2} /> : null}
       {children}
-      {iconRight}
+      {IconRight ? <IconRight size={13} strokeWidth={2} className="ml-1" /> : null}
     </button>
   );
 }

@@ -4,10 +4,16 @@ import { attemptLogin, createSession, destroySession, SESSION_COOKIE, requireAut
 import { asyncRoute, bad } from '../util.js';
 import { providerInfo } from '../services/llm.js';
 import { hashPassword, verifyPassword } from '../crypto.js';
+import { enforceRateLimit } from '../rate-limit.js';
+import {
+  acceptInvite, createAccount, inviteByToken, inviteSummary, validateSignup,
+} from '../services/identity.js';
+import { audit } from '../auth.js';
 
 const router = Router();
 
 router.post('/auth/login', asyncRoute(async (req, res) => {
+  if (!enforceRateLimit(req, res, { name: 'login', limit: 20, windowMs: 15 * 60_000 })) return;
   const { email, password } = req.body || {};
   if (!email || !password) throw bad('Email and password are required');
   const user = attemptLogin(email, password);
@@ -15,6 +21,58 @@ router.post('/auth/login', asyncRoute(async (req, res) => {
   const { sid, expires } = createSession(user.id);
   res.cookie(SESSION_COOKIE, sid, { httpOnly: true, sameSite: 'lax', expires, path: '/' });
   res.json({ user });
+}));
+
+
+/* ------------------------------------------------------------------ signup */
+router.post('/auth/register', asyncRoute(async (req, res) => {
+  if (process.env.REDFOX_SIGNUP === 'closed') {
+    return res.status(403).json({ error: 'Signups are closed on this instance' });
+  }
+  if (!enforceRateLimit(req, res, { name: 'register', limit: 10, windowMs: 60 * 60_000 })) return;
+  const { invite_token: inviteToken } = req.body || {};
+  const invite = inviteToken ? inviteByToken(inviteToken) : null;
+
+  const { errors, values } = validateSignup(req.body || {});
+  if (invite?.email && values.email && invite.email.toLowerCase() !== values.email) {
+    errors.email = `This invitation was sent to ${invite.email}`;
+  }
+  if (Object.keys(errors).length) {
+    return res.status(422).json({ error: 'Check the highlighted fields', fields: errors });
+  }
+
+  const { user, workspace } = createAccount({
+    name: values.name,
+    email: values.email,
+    password: values.password,
+    workspaceName: invite ? undefined : values.workspaceName,
+  });
+
+  let joined = null;
+  if (invite) {
+    joined = acceptInvite({ token: inviteToken, userId: user.id });
+    /* The workspace created during signup is redundant when the account joins an
+       existing one, so it is removed rather than left as an empty husk. */
+    if (joined.workspace.id !== workspace.id && db.prepare('SELECT count(*) AS n FROM memberships WHERE workspace_id = ?').get(workspace.id).n === 1) {
+      db.prepare('DELETE FROM memberships WHERE workspace_id = ? AND user_id = ?').run(workspace.id, user.id);
+      db.prepare('DELETE FROM workspaces WHERE id = ?').run(workspace.id);
+    }
+  }
+
+  const { sid, expires } = createSession(user.id);
+  res.cookie(SESSION_COOKIE, sid, { httpOnly: true, sameSite: 'lax', expires, path: '/' });
+  audit(joined?.workspace.id || workspace.id, null, 'identity', `Account created for ${user.email}`, user.name);
+  res.status(201).json({ user, workspace: joined?.workspace || workspace, role: joined?.role || 'owner' });
+}));
+
+/* -------------------------------------------------------------- invitations */
+router.get('/invites/:token', asyncRoute(async (req, res) => {
+  res.json(inviteSummary(req.params.token));
+}));
+
+router.post('/invites/:token/accept', requireAuth, workspaceContext, asyncRoute(async (req, res) => {
+  const result = acceptInvite({ token: req.params.token, userId: req.user.id });
+  res.json(result);
 }));
 
 router.post('/auth/logout', asyncRoute(async (req, res) => {

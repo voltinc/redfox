@@ -8,6 +8,7 @@ import { useAuth } from '../lib/auth.jsx';
 import { useApi } from '../lib/useApi.js';
 import { PageBody } from '../components/Shell.jsx';
 import { DeployModal } from '../components/DeployModal.jsx';
+import GettingStarted from '../components/GettingStarted.jsx';
 import {
   Badge, Banner, Button, Dot, EmptyState, ErrorState, IconButton, LoadingBlock, Panel, PageHeader,
   SectionTitle, StatusBadge, Table, Td, Th, Tr, Sparkline,
@@ -85,7 +86,9 @@ export default function Overview() {
           </div>
         </div>
 
-        {loading ? <LoadingBlock label="Loading workspace" rows={5} /> : (
+        {loading ? <LoadingBlock label="Loading workspace" rows={5} /> : !projects.length ? (
+          <GettingStarted firstName={user?.name?.split(' ')[0]} workspace={workspace} />
+        ) : (
           <>
             <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4">
               <StatTile
@@ -359,10 +362,10 @@ export default function Overview() {
               </Panel>
             </div>
 
-            <Banner tone="neutral" className="mt-3" title="About this data.">
-              The workspace was seeded with demonstration projects, repositories, deployment history and infrastructure records so every screen
-              has real structure to work with. Deployments you trigger on a project with the local runner execute real builds on this host and
-              publish a working preview URL. Infrastructure records marked demo have not been contacted; Redfox says so wherever they appear.
+            <Banner tone="neutral" className="mt-3" title="About this instance.">
+              This workspace is preloaded with sample projects, repositories and deployment history so every screen has real structure to work
+              with. Deployments run on the local runner execute real builds on this host and publish a working preview URL. Infrastructure marked
+              simulated has not been contacted; Redfox says so wherever it appears.
             </Banner>
           </>
         )}

@@ -114,7 +114,7 @@ export default function Monitoring() {
                     <Link to={`/servers/${entry.server.id}`} className="flex items-center gap-1.5 text-xs text-fg hover:text-accent">
                       <Dot tone={entry.server.status === 'connected' ? 'success' : entry.server.status === 'error' ? 'danger' : 'neutral'} />
                       {entry.server.name}
-                      {entry.server.mode === 'demo' ? <Badge tone="warn">demo</Badge> : null}
+                      {entry.server.mode === 'demo' ? <Badge tone="warn">simulated</Badge> : null}
                     </Link>
                     <span className="text-2xs text-dim">{entry.series.length ? `${new Date(entry.series.at(-1).ts).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}` : 'no data'}</span>
                   </div>
@@ -170,8 +170,8 @@ export default function Monitoring() {
         </Panel>
 
         {demo.length ? (
-          <Banner tone="neutral" className="mt-2.5" title="Demonstration series.">
-            {demo.length} server{demo.length === 1 ? '' : 's'} show seeded metric series, labelled demo on their pages. Live samples only come from this host.
+          <Banner tone="neutral" className="mt-2.5" title="Simulated series.">
+            {demo.length} server{demo.length === 1 ? '' : 's'} show sample metric series, labelled simulated on their pages. Live samples only come from this host.
           </Banner>
         ) : null}
       </PageBody>

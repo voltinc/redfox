@@ -94,7 +94,7 @@ export function DeployModal({ open, onClose, projects = [], defaultProject }) {
         </div>
 
         {project?.runner === 'demo' ? (
-          <Banner tone="warn" title="Demonstration runner.">
+          <Banner tone="warn" title="Simulated runner.">
             This project records the pipeline without executing it. Set the runner to local in project settings to run real builds.
           </Banner>
         ) : project?.runner === 'local' ? (

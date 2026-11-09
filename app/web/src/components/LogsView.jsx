@@ -84,7 +84,7 @@ export default function LogsView({ project, projects = [], onProjectChange, heig
           <Select value={mode} onChange={(event) => setMode(event.target.value)}>
             <option value="">All origins</option>
             <option value="live">Live</option>
-            <option value="demo">Seed data</option>
+            <option value="demo">Sample data</option>
           </Select>
         </div>
         <SegmentedControl size="sm" value={hours} onChange={setHours} options={RANGES} />
@@ -140,7 +140,7 @@ export default function LogsView({ project, projects = [], onProjectChange, heig
                           <Td>
                             <span className="flex items-center gap-1 text-2xs text-dim">
                               {log.source}
-                              {log.mode === 'demo' ? <span className="text-[9px] text-warn">seed</span> : null}
+                              {log.mode === 'demo' ? <span className="text-[9px] text-warn">sample</span> : null}
                             </span>
                           </Td>
                           <Td><span className={cx('block max-w-[520px] truncate text-xs', log.level === 'error' ? 'text-[#ffb3b0]' : 'text-muted')}>{log.message}</span></Td>
@@ -161,7 +161,7 @@ export default function LogsView({ project, projects = [], onProjectChange, heig
                               <div className="grid gap-3 sm:grid-cols-4">
                                 <div><p className="text-2xs uppercase tracking-[0.06em] text-dim">Timestamp</p><p className="mt-0.5 font-mono text-2xs text-muted">{new Date(log.ts).toISOString()}</p></div>
                                 <div><p className="text-2xs uppercase tracking-[0.06em] text-dim">Project</p><p className="mt-0.5 text-2xs text-muted">{log.project_name || 'workspace'}</p></div>
-                                <div><p className="text-2xs uppercase tracking-[0.06em] text-dim">Source</p><p className="mt-0.5 text-2xs capitalize text-muted">{log.source} · {log.mode === 'demo' ? 'seed data' : 'live request'}</p></div>
+                                <div><p className="text-2xs uppercase tracking-[0.06em] text-dim">Source</p><p className="mt-0.5 text-2xs capitalize text-muted">{log.source} · {log.mode === 'demo' ? 'sample data' : 'live request'}</p></div>
                                 <div><p className="text-2xs uppercase tracking-[0.06em] text-dim">Age</p><p className="mt-0.5 text-2xs text-muted">{relativeTime(log.ts)}</p></div>
                               </div>
                               <pre className="mt-2 overflow-x-auto rounded border border-line bg-base px-2 py-1.5 font-mono text-2xs leading-5 text-muted">{log.message}</pre>

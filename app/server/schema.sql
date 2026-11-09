@@ -38,6 +38,20 @@ CREATE TABLE IF NOT EXISTS memberships (
   UNIQUE (workspace_id, user_id)
 );
 
+
+CREATE TABLE IF NOT EXISTS invites (
+  id           TEXT PRIMARY KEY,
+  workspace_id TEXT NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+  email        TEXT,
+  role         TEXT NOT NULL DEFAULT 'developer',
+  token        TEXT NOT NULL UNIQUE,
+  invited_by   TEXT NOT NULL,
+  created_at   TEXT NOT NULL,
+  expires_at   TEXT NOT NULL,
+  accepted_at  TEXT,
+  accepted_by  TEXT
+);
+
 -- ---------------------------------------------------------------------------
 -- Projects
 -- ---------------------------------------------------------------------------
@@ -386,3 +400,5 @@ CREATE INDEX IF NOT EXISTS idx_metrics_scope      ON metrics(scope, target, ts D
 CREATE INDEX IF NOT EXISTS idx_obj_bucket         ON objects(bucket_id);
 CREATE INDEX IF NOT EXISTS idx_env_project        ON env_vars(project_id);
 CREATE INDEX IF NOT EXISTS idx_containers_server  ON containers(server_id);
+CREATE INDEX IF NOT EXISTS idx_invites_token   ON invites(token);
+CREATE INDEX IF NOT EXISTS idx_invites_ws      ON invites(workspace_id, created_at DESC);

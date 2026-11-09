@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { db, nowIso, projectDb } from '../db.js';
 import { requireAuth, workspaceContext, requireRole, audit } from '../auth.js';
-import { asyncRoute, bad, slugify, requireFields, paged, paginate } from '../util.js';
+import { asyncRoute, bad, slugify, requireFields, paged, paginate, notFound } from '../util.js';
 import { id } from '../crypto.js';
 import { queueDepth } from '../services/deployEngine.js';
 import { hostSnapshot } from '../services/metrics.js';
+import { createInvite, listInvites } from '../services/identity.js';
 
 const router = Router();
 router.use(requireAuth, workspaceContext);
@@ -151,6 +152,26 @@ router.patch('/workspace', requireRole('admin'), asyncRoute(async (req, res) => 
     db.prepare('UPDATE workspaces SET region = ? WHERE id = ?').run(region, req.workspace.id);
   }
   audit(req.workspace.id, null, 'workspace', `Workspace settings updated by ${req.user.name}`, req.user.name);
+  res.json({ ok: true });
+}));
+
+router.get('/workspace/invites', asyncRoute(async (req, res) => {
+  res.json({ invites: listInvites(req.workspace.id), role: req.role });
+}));
+
+router.post('/workspace/invites', requireRole('admin'), asyncRoute(async (req, res) => {
+  const { email, role } = req.body || {};
+  const allowed = ['admin', 'developer', 'viewer'];
+  if (role && !allowed.includes(role)) throw bad('Role must be admin, developer or viewer');
+  const invite = createInvite({ workspaceId: req.workspace.id, userId: req.user.id, email, role });
+  audit(req.workspace.id, null, 'identity', `Invitation created${invite.email ? ` for ${invite.email}` : ''}`, req.user.name);
+  res.status(201).json({ invite: { ...invite, state: 'pending' }, token: invite.token });
+}));
+
+router.delete('/workspace/invites/:inviteId', requireRole('admin'), asyncRoute(async (req, res) => {
+  const invite = db.prepare('SELECT * FROM invites WHERE id = ? AND workspace_id = ?').get(req.params.inviteId, req.workspace.id);
+  if (!invite) throw notFound('Invitation not found');
+  db.prepare('DELETE FROM invites WHERE id = ?').run(invite.id);
   res.json({ ok: true });
 }));
 

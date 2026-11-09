@@ -135,7 +135,7 @@ export default function DeploymentDetail() {
                   {deployment.environment === 'production' ? 'Production deployment' : 'Preview deployment'}
                 </h1>
                 <StatusBadge status={effectiveStatus} />
-                {deployment.mode === 'demo' ? <Badge tone="warn">demo runner</Badge> : null}
+                {deployment.mode === 'demo' ? <Badge tone="warn">simulated</Badge> : null}
                 {deployment.mode === 'local' ? <Badge tone="success">real build</Badge> : null}
               </div>
               <p className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted">
@@ -181,8 +181,8 @@ export default function DeploymentDetail() {
           <Banner tone="danger" className="mb-2.5" title="Deployment failed.">{deployment.error}</Banner>
         ) : null}
         {deployment.mode === 'demo' && effectiveStatus === 'ready' ? (
-          <Banner tone="warn" className="mb-2.5" title="Demonstration deployment.">
-            This project uses the demonstration runner, so the pipeline was recorded without being executed and no artifact is served at the URL.
+          <Banner tone="warn" className="mb-2.5" title="Recorded deployment.">
+            This project uses the simulated runner, so the pipeline was recorded rather than executed and no artifact is served at the URL. Switch the project to the local runner to produce real builds.
           </Banner>
         ) : null}
 
@@ -296,7 +296,7 @@ export default function DeploymentDetail() {
                     { label: 'Deployment', value: <span className="font-mono text-2xs">{deployment.id}</span> },
                     { label: 'Environment', value: deployment.environment },
                     { label: 'Trigger', value: deployment.trigger },
-                    { label: 'Runner', value: deployment.mode === 'local' ? 'local sandbox' : deployment.mode === 'demo' ? 'demonstration' : 'recorded' },
+                    { label: 'Runner', value: deployment.mode === 'local' ? 'local sandbox' : deployment.mode === 'demo' ? 'simulated' : 'recorded' },
                     { label: 'Started', value: data?.deployment?.started_at ? relativeTime(data.deployment.started_at) : 'not started' },
                     { label: 'Duration', value: duration(deployment.duration_ms) },
                     { label: 'Branch', value: deployment.branch, mono: true },

@@ -11,19 +11,7 @@ import {
   Modal, useToast, Field, Input,
 } from '../ui/index.jsx';
 import { CommandPalette, NAV } from './CommandPalette.jsx';
-
-export function Logo({ size = 20, withWordmark = true, className }) {
-  return (
-    <span className={cx('flex items-center gap-2', className)}>
-      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M4 3.6 12 8.8l8-5.2v7.6c0 4.7-3.4 8.4-8 9.6-4.6-1.2-8-4.9-8-9.6V3.6Z" fill="var(--accent)" fillOpacity="0.14" stroke="var(--accent)" strokeWidth="1.4" strokeLinejoin="round" />
-        <path d="M9.2 12.2h1.7M13.1 12.2h1.7" stroke="var(--accent)" strokeWidth="1.6" strokeLinecap="round" />
-        <path d="M10.6 16.2h2.8" stroke="var(--accent)" strokeWidth="1.3" strokeLinecap="round" opacity="0.7" />
-      </svg>
-      {withWordmark ? <span className="text-[14px] font-semibold tracking-[-0.02em] text-fg">Redfox</span> : null}
-    </span>
-  );
-}
+import { Logo, LogoLockup } from './Brand.jsx';
 
 function WorkspaceSwitcher() {
   const { workspace, workspaces, refresh } = useAuth();
@@ -177,8 +165,8 @@ function SidebarContent({ onNavigate }) {
   const location = useLocation();
   return (
     <>
-      <div className="flex items-center justify-between px-3 pb-2 pt-3">
-        <Link to="/" onClick={onNavigate} className="flex items-center"><Logo /></Link>
+      <div className="flex items-center justify-between px-3 pb-2.5 pt-3">
+        <Link to="/" onClick={onNavigate} className="focus-ring rounded-md"><Logo size={25} /></Link>
         <Badge tone="neutral" className="ml-1">v0.9</Badge>
       </div>
       <div className="px-2.5 pb-2">

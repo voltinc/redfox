@@ -143,7 +143,7 @@ export default function AccountSettings() {
                     Change password
                   </Button>
                 </div>
-                <p className="text-2xs text-dim">This installation seeds a demo password. Change it before exposing the server to a network.</p>
+                <p className="text-2xs text-dim">This instance ships with a seeded administrator account. Change its password before exposing the server to a network.</p>
               </div>
             </Panel>
           </div>

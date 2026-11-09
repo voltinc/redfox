@@ -69,8 +69,8 @@ export default function Containers() {
         </div>
 
         {demoCount ? (
-          <Banner tone="warn" className="mb-2.5" title="Demonstration containers present.">
-            {demoCount} container{demoCount === 1 ? '' : 's'} belong to demonstration servers that Redfox has not contacted. Start, stop and restart
+          <Banner tone="warn" className="mb-2.5" title="Simulated containers.">
+            {demoCount} container{demoCount === 1 ? '' : 's'} belong to servers this instance has not contacted. Start, stop and restart
             return an explicit refusal for those records rather than pretending to act.
           </Banner>
         ) : null}
@@ -108,7 +108,7 @@ export default function Containers() {
                     <Td>
                       <Link to={`/servers/${container.server_id}`} className="flex items-center gap-1 text-xs text-muted hover:text-fg">
                         {container.server_name}
-                        {container.server_mode === 'demo' ? <Badge tone="warn">demo</Badge> : null}
+                        {container.server_mode === 'demo' ? <Badge tone="warn">simulated</Badge> : null}
                       </Link>
                     </Td>
                     <Td><span className="block max-w-[220px] truncate font-mono text-2xs text-dim">{container.image}</span></Td>

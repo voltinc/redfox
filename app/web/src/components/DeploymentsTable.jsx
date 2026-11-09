@@ -36,7 +36,7 @@ export function DeploymentsTable({ deployments, emptyAction }) {
             <Td>
               <span className="flex items-center gap-1.5">
                 <span className="font-medium text-fg">{deployment.project_name}</span>
-                {deployment.mode === 'demo' ? <span className="text-2xs text-warn">demo</span> : null}
+                {deployment.mode === 'demo' ? <span className="text-2xs text-warn">simulated</span> : null}
               </span>
             </Td>
             <Td>

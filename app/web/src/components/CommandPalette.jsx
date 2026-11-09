@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Activity, ArrowRight, Box, CornerDownLeft, Database, FileCode2, GitBranch, Globe, HardDrive,
+  Activity, ArrowRight, BookOpen, Box, CornerDownLeft, Database, FileCode2, GitBranch, Globe, HardDrive,
   KeyRound, LayoutDashboard, Rocket, ScrollText, Search, Server, Settings, Sparkles, UserCog, Container,
 } from 'lucide-react';
 import { api } from '../lib/api.js';
@@ -21,6 +21,7 @@ const NAV = [
     { label: 'Database', to: '/database', icon: Database },
     { label: 'Storage', to: '/storage', icon: HardDrive },
     { label: 'API Explorer', to: '/explorer', icon: FileCode2 },
+    { label: 'Documentation', to: '/docs', icon: BookOpen },
   ] },
   { group: 'Infrastructure', items: [
     { label: 'Servers', to: '/servers', icon: Server },

@@ -3,6 +3,7 @@ import { Building2, Check, CreditCard, Save, ShieldCheck, Trash2, Users } from '
 import { del, patch, post } from '../lib/api.js';
 import { useApi } from '../lib/useApi.js';
 import { PageBody } from '../components/Shell.jsx';
+import InvitesPanel from '../components/InvitesPanel.jsx';
 import {
   Avatar, Badge, Banner, Button, ConfirmDialog, ErrorState, Field, Input, LoadingBlock, PageHeader, Panel,
   PanelHeader, Select, Table, Td, Th, Tr, useToast,
@@ -150,6 +151,7 @@ export default function WorkspaceSettings() {
                 Viewer is read-only. Developer can deploy, commit and change variables. Admin can also manage members and delete projects.
               </div>
             </Panel>
+            <InvitesPanel admin={admin} />
           </div>
 
           <div className="space-y-2.5">

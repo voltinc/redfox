@@ -3,9 +3,11 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './lib/auth.jsx';
 import { ToastProvider, Spinner } from './ui/index.jsx';
 import { Shell } from './components/Shell.jsx';
-import { Logo } from './components/Shell.jsx';
+import { Logo } from './components/Brand.jsx';
 
+import Landing from './pages/Landing.jsx';
 import Login from './pages/Login.jsx';
+import Signup from './pages/Signup.jsx';
 import Overview from './pages/Overview.jsx';
 import Projects from './pages/Projects.jsx';
 import ProjectNew from './pages/ProjectNew.jsx';
@@ -26,6 +28,7 @@ import CommitDetail from './pages/CommitDetail.jsx';
 import DatabasePage from './pages/Database.jsx';
 import Storage from './pages/Storage.jsx';
 import ApiExplorer from './pages/ApiExplorer.jsx';
+import Docs from './pages/Docs.jsx';
 import Servers from './pages/Servers.jsx';
 import ServerDetail from './pages/ServerDetail.jsx';
 import Containers from './pages/Containers.jsx';
@@ -54,11 +57,25 @@ function RequireAuth({ children }) {
   return children;
 }
 
-function LoginRoute() {
+function PublicRoute({ children }) {
   const { user, loading } = useAuth();
   if (loading) return <BootScreen label="Checking session" />;
   if (user) return <Navigate to="/" replace />;
-  return <Login />;
+  return children;
+}
+
+/* The landing page and the console share the root path: signed-out visitors get
+   the marketing page, everyone else gets the app. Any other console route sends
+   an anonymous visitor to sign in, remembering where they were going. */
+function RootRoute() {
+  const { user, loading } = useAuth();
+  const location = useLocation();
+  if (loading) return <BootScreen />;
+  if (!user) {
+    if (location.pathname === '/') return <Landing />;
+    return <Navigate to="/login" replace state={{ from: location.pathname + location.search }} />;
+  }
+  return <Shell />;
 }
 
 export default function App() {
@@ -67,8 +84,9 @@ export default function App() {
       <AuthProvider>
         <Suspense fallback={<BootScreen />}>
           <Routes>
-            <Route path="/login" element={<LoginRoute />} />
-            <Route element={<RequireAuth><Shell /></RequireAuth>}>
+            <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+            <Route path="/signup" element={<PublicRoute><Signup /></PublicRoute>} />
+            <Route element={<RootRoute />}>
               <Route index element={<Overview />} />
               <Route path="projects" element={<Projects />} />
               <Route path="projects/new" element={<ProjectNew />} />
@@ -90,6 +108,7 @@ export default function App() {
               <Route path="database" element={<DatabasePage />} />
               <Route path="storage" element={<Storage />} />
               <Route path="explorer" element={<ApiExplorer />} />
+              <Route path="docs" element={<Docs />} />
               <Route path="servers" element={<Servers />} />
               <Route path="servers/:serverId" element={<ServerDetail />} />
               <Route path="containers" element={<Containers />} />

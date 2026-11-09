@@ -68,7 +68,7 @@ export default function ProjectLayout() {
         badge={(
           <span className="flex items-center gap-1.5">
             <StatusBadge status={project.status} />
-            {project.runner === 'local' ? <Badge tone="success">real builds</Badge> : <Badge tone="neutral">demo runner</Badge>}
+            {project.runner === 'local' ? <Badge tone="success">real builds</Badge> : <Badge tone="neutral">simulated</Badge>}
           </span>
         )}
         description={(
