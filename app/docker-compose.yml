@@ -1,0 +1,28 @@
+services:
+  redfox:
+    build: .
+    image: redfox:0.9.0
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      REDFOX_DATA_DIR: /data
+      REDFOX_BUILD_DIR: /builds
+      # Set this before exposing the instance: it encrypts environment variables,
+      # API keys and webhook secrets at rest.
+      REDFOX_SECRET_KEY: ${REDFOX_SECRET_KEY:-change-me-before-production}
+      # Optional: enables hosted Solene answers instead of the local engine.
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      REDFOX_MODEL: ${REDFOX_MODEL:-}
+      # Optional: enables real container controls when a Docker endpoint is reachable.
+      DOCKER_HOST: ${DOCKER_HOST:-}
+    volumes:
+      - redfox-data:/data
+      - redfox-builds:/builds
+    restart: unless-stopped
+
+volumes:
+  redfox-data:
+  redfox-builds:
